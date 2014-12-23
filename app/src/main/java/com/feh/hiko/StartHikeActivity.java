@@ -1,5 +1,7 @@
 package com.feh.hiko;
 
+import com.feh.hiko.db.Hike;
+import com.feh.hiko.db.HikeDataSource;
 import com.feh.hiko.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -7,8 +9,14 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.sql.SQLException;
+import java.util.List;
 
 
 /**
@@ -45,6 +53,12 @@ public class StartHikeActivity extends Activity {
      * The instance of the {@link SystemUiHider} for this activity.
      */
     private SystemUiHider mSystemUiHider;
+
+    /*
+     * member for the communication with the database
+     */
+
+    private HikeDataSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +123,29 @@ public class StartHikeActivity extends Activity {
             }
         });
 
+
+        //we open the database
+        dataSource = new HikeDataSource(this);
+        try {
+            dataSource.open();
+        }
+        catch(SQLException e)
+        {
+            Log.w("SQLExeception",e);
+        }
+
+        //we fetch hikes to the listView
+        List<Hike> hikes = dataSource.getAllHike();
+        Log.w("HIKES",hikes.get(0).getHikeName());
+        ListView lw_hike = (ListView) findViewById(R.id.listViewHike);
+        ArrayAdapter<Hike> adapter = new ArrayAdapter<Hike>(this,android.R.layout.simple_list_item_1,hikes);
+        lw_hike.setAdapter(adapter);
+
+        dataSource.close();
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+      //  findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
 
     @Override

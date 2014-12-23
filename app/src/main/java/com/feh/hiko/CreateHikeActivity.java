@@ -1,5 +1,7 @@
 package com.feh.hiko;
 
+import com.feh.hiko.db.Hike;
+import com.feh.hiko.db.HikeDataSource;
 import com.feh.hiko.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -7,8 +9,11 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.sql.SQLException;
 
 
 /**
@@ -45,6 +50,11 @@ public class CreateHikeActivity extends Activity {
      * The instance of the {@link SystemUiHider} for this activity.
      */
     private SystemUiHider mSystemUiHider;
+
+    /*
+     * used for the communication with the db
+     */
+    private HikeDataSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +119,23 @@ public class CreateHikeActivity extends Activity {
             }
         });
 
+        //Only for test - added by theoz 23/12/2014
+        dataSource = new HikeDataSource(this);
+        try {
+            dataSource.open();
+        }
+        catch(SQLException e)
+        {
+            Log.w("SQLException", e);
+        }
+        dataSource.createHike(new Hike("Randos_Pédos",12,280));
+        dataSource.createHike(new Hike("Randos_Bear",18,380));
+        dataSource.close();
+
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+      //  findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
 
     @Override
