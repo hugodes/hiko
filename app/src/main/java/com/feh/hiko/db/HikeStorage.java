@@ -15,13 +15,18 @@ public class HikeStorage extends SQLiteOpenHelper {
     public static final String COLUMN_DISTANCE = "HIKE_DISTANCE";
     public static final String COLUMN_TIME = "HIKE_TIME";
 
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_LOCATION = "HIKE_LOCATION";
+
     private static final String HIKE_TABLE_CREATE =
-            "CREATE TABLE " + HIKE_TABLE + " (" +
+            "CREATE TABLE " + HIKE_TABLE  +
+             "( _id integer primary key autoincrement, " +
             "HIKE_NAME TEXT, " +
             "HIKE_DISTANCE  INTEGER, " +
-            "HIKE_TIME INTEGER);";
+            "HIKE_TIME INTEGER, " +
+            "HIKE_LOCATION INTEGER);";
 
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 9;
 
     public HikeStorage(Context context) {
         super(context,"hikes.db",null,DB_VERSION);
@@ -43,22 +48,4 @@ public class HikeStorage extends SQLiteOpenHelper {
 
     }
 
-    public String getHikeTable()
-    {
-        return HIKE_TABLE;
-    }
-    public String getColumnName()
-    {
-        return COLUMN_NAME;
-    }
-
-    public String getColumnDistance()
-    {
-        return COLUMN_DISTANCE;
-    }
-
-    public String getColumnTime()
-    {
-        return COLUMN_TIME;
-    }
 }

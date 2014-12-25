@@ -1,5 +1,6 @@
 package com.feh.hiko;
 
+import com.feh.hiko.db.Coord;
 import com.feh.hiko.db.Hike;
 import com.feh.hiko.db.HikeDataSource;
 import com.feh.hiko.db.Location;
@@ -14,13 +15,12 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Vector;
 
 
 /**
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @see SystemUiHider
  */
-public class StartHikeActivity extends Activity  {
+public class DetailHikeActivity extends Activity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -58,19 +58,16 @@ public class StartHikeActivity extends Activity  {
      */
     private SystemUiHider mSystemUiHider;
 
-    /*
-     * member for the communication with the database
-     */
 
     private HikeDataSource dataSource;
 
-    private ListView lw_hike;
+    private ListView lw_loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_start_hike);
+        setContentView(R.layout.activity_detail_hike);
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
@@ -130,6 +127,12 @@ public class StartHikeActivity extends Activity  {
         });
 
 
+        //Added by theoz 25/12/2015
+        Intent intent = getIntent();
+        int position = intent.getIntExtra("position",0);
+
+        Log.i("Position",Integer.toString(position));
+
 
         //we open the database
         dataSource = new HikeDataSource(this);
@@ -141,34 +144,20 @@ public class StartHikeActivity extends Activity  {
             Log.w("SQLExeception",e);
         }
 
-        //we fetch hikes to the listView
-        List<Hike> hikes = dataSource.getAllHike();
+        Vector<Coord> vCoord = dataSource.getLocationForId(position);
 
-        lw_hike = (ListView) findViewById(R.id.listViewHike);
-        ArrayAdapter<Hike> adapter = new ArrayAdapter<Hike>(this,android.R.layout.simple_list_item_1,hikes);
-        lw_hike.setAdapter(adapter);
+        lw_loc = (ListView) findViewById(R.id.listViewLoc);
+        ArrayAdapter<Coord> adapter = new ArrayAdapter<Coord>(this,android.R.layout.simple_list_item_1,vCoord);
+        lw_loc.setAdapter(adapter);
+
 
         dataSource.close();
-
-        //We create an even listener on the listview , for each hike it will show details
-        lw_hike.setOnItemClickListener(new OnItemClickListener()
-        {
-            public void onItemClick(AdapterView<?> arg0,View arg1, int position, long arg3)
-            {
-               Intent n = new Intent(getApplicationContext(), DetailHikeActivity.class);
-                n.putExtra("position", position);
-                startActivity(n);
-            }
-        });
-
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-      //  findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+   //     findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
-
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -212,6 +201,4 @@ public class StartHikeActivity extends Activity  {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
-
-
 }

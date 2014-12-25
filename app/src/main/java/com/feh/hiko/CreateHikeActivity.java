@@ -2,6 +2,8 @@ package com.feh.hiko;
 
 import com.feh.hiko.db.Hike;
 import com.feh.hiko.db.HikeDataSource;
+import com.feh.hiko.db.Location;
+import com.feh.hiko.db.Coord;
 import com.feh.hiko.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -128,8 +130,18 @@ public class CreateHikeActivity extends Activity {
         {
             Log.w("SQLException", e);
         }
-        dataSource.createHike(new Hike("Randos_Pédos",12,280));
-        dataSource.createHike(new Hike("Randos_Bear",18,380));
+
+        Location locate1 = new Location();
+        locate1.addCoord(new Coord((float)1.2,(float)1.3));
+        locate1.addCoord(new Coord((float)3.2,(float)3.3));
+
+        Location locate2 = new Location();
+        locate2.addCoord(new Coord((float)1.5,(float)1.4));
+        locate2.addCoord(new Coord((float)2.2,(float)2.3));
+
+
+        dataSource.createHike(new Hike(0,"Moutain_Hike",12,280,locate1));
+        dataSource.createHike(new Hike(1,"River_Hike",18,380,locate2));
         dataSource.close();
 
         // Upon interacting with UI controls, delay any scheduled hide()

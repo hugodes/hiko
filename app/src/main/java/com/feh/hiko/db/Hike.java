@@ -5,19 +5,45 @@ package com.feh.hiko.db;
  */
 public class Hike {
 
+    private long id;
     private String hikeName;
     private int totalDistance;
     private int totalTime;
 
-    public Hike(String p_HikeName,int p_totalDistance,int p_totalTime)
+    private Location locations;
+
+    public Hike(long p_id,String p_HikeName,int p_totalDistance,int p_totalTime,Location locationsId)
     {
+        id = p_id;
         hikeName = p_HikeName;
         totalDistance = p_totalDistance;
         totalTime = p_totalTime;
+        this.locations = locationsId;
     }
 
     public Hike(){}
 
+    public long getId()
+    {
+        return id;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
+    }
+
+
+
+    public Location getLocations()
+    {
+        return locations;
+    }
+
+    public void setLocations(Location locations)
+    {
+        this.locations = locations;
+    }
     public String getHikeName(){
         return hikeName;
     }
@@ -45,7 +71,7 @@ public class Hike {
 
     public String toString()
     {
-        return hikeName + " " + totalDistance + " " + totalTime;
+        return id + " " + hikeName + " " + totalDistance + " " + totalTime + " " ;// locations.getlCoords().size();
     }
 
 }
