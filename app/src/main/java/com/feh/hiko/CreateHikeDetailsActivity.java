@@ -1,9 +1,9 @@
 package com.feh.hiko;
 
+import com.feh.hiko.db.Coord;
 import com.feh.hiko.db.Hike;
 import com.feh.hiko.db.HikeDataSource;
 import com.feh.hiko.db.Location;
-import com.feh.hiko.db.Coord;
 import com.feh.hiko.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -26,7 +26,7 @@ import java.sql.SQLException;
  *
  * @see SystemUiHider
  */
-public class CreateHikeActivity extends Activity {
+public class CreateHikeDetailsActivity extends Activity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -56,23 +56,16 @@ public class CreateHikeActivity extends Activity {
     private SystemUiHider mSystemUiHider;
 
     /*
-     * used for the communication with the db
+     * Will contain the different Location Point
      */
-    private HikeDataSource dataSource;
 
-    /*
-     * used to get information from the layout
-     */
-    static int hikeId = 0;
-    String hikeName;
-    String hikeDistance;
-    String hikeTime;
+    Location locate = new Location();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_create_hike);
+        setContentView(R.layout.activity_create_hike_details);
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
@@ -131,8 +124,42 @@ public class CreateHikeActivity extends Activity {
             }
         });
 
-        //Only for test - added by theoz 23/12/2014
-  /*      dataSource = new HikeDataSource(this);
+        // Upon interacting with UI controls, delay any scheduled hide()
+        // operations to prevent the jarring behavior of controls going away
+        // while interacting with the UI.
+    //    findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+
+
+
+
+
+    }
+
+    public void addLocation(View view)
+    {
+
+
+        String point1 = ((EditText)findViewById(R.id.point1_editText)).getText().toString();
+        String point2 = ((EditText)findViewById(R.id.point2_editText)).getText().toString();
+        locate.addCoord(new Coord(Float.parseFloat(point1),Float.parseFloat(point2)));
+
+        ((EditText)findViewById(R.id.point1_editText)).setText("");
+        ((EditText)findViewById(R.id.point2_editText)).setText("");
+
+
+    }
+
+    public void addHikeDb(View view)
+    {
+        //We get information from the last page
+        Intent intent = getIntent();
+        int hikeId = intent.getIntExtra("hikeId",0);
+        String hikeName = intent.getStringExtra("hikeName");
+        String hikeTime = intent.getStringExtra("hikeTime");
+        String hikeDistance = intent.getStringExtra("hikeDistance");
+
+        HikeDataSource dataSource = new HikeDataSource(this);
         try {
             dataSource.open();
         }
@@ -141,37 +168,13 @@ public class CreateHikeActivity extends Activity {
             Log.w("SQLException", e);
         }
 
-        Location locate1 = new Location();
-        locate1.addCoord(new Coord((float)1.2,(float)1.3));
-        locate1.addCoord(new Coord((float)3.2,(float)3.3));
+        dataSource.createHike(new Hike(hikeId,hikeName,Integer.parseInt(hikeDistance), Integer.parseInt(hikeTime),locate));
 
-        Location locate2 = new Location();
-        locate2.addCoord(new Coord((float)1.5,(float)1.4));
-        locate2.addCoord(new Coord((float)2.2,(float)2.3));
+        dataSource.close();
 
+        Intent Nintent = new Intent(this,MenuActivity.class);
+        startActivity(Nintent);
 
-        dataSource.createHike(new Hike(0,"Moutain_Hike",12,280,locate1));
-        dataSource.createHike(new Hike(1,"River_Hike",18,380,locate2));
-        dataSource.close();*/
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-      //  findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
-    }
-
-    public void createHikeDetailsActivity(View view){
-        hikeName = ((EditText)findViewById(R.id.hike_name_editText)).getText().toString();
-        hikeDistance = ((EditText)findViewById(R.id.hike_distance_editText)).getText().toString();
-        hikeTime = ((EditText)findViewById(R.id.hike_time_editText)).getText().toString();
-
-        Intent n = new Intent(getApplicationContext(), CreateHikeDetailsActivity.class);
-        n.putExtra("hikeId",hikeId);
-        n.putExtra("hikeName", hikeName);
-        n.putExtra("hikeDistance", hikeDistance);
-        n.putExtra("hikeTime", hikeTime);
-        hikeId++;
-        startActivity(n);
     }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
