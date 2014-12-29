@@ -6,16 +6,12 @@ import com.feh.hiko.db.Location;
 import com.feh.hiko.db.Coord;
 import com.feh.hiko.util.SystemUiHider;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,12 +20,7 @@ import android.widget.EditText;
 import java.sql.SQLException;
 
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
- */
+
 public class CreateHikeActivity extends Activity {
 
 
@@ -41,7 +32,6 @@ public class CreateHikeActivity extends Activity {
     /*
      * used to get information from the layout
      */
-    static int hikeId = 0;
     String hikeName;
     String hikeDistance;
     String hikeTime;
@@ -52,7 +42,7 @@ public class CreateHikeActivity extends Activity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+               WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_create_hike);
     }
@@ -81,17 +71,20 @@ public class CreateHikeActivity extends Activity {
     }
 
 
-    public void createHikeDetailsActivity(View view){
+    public void createHikeDetailsActivity(View view) throws SQLException {
         hikeName = ((EditText)findViewById(R.id.hike_name_editText)).getText().toString();
         hikeDistance = ((EditText)findViewById(R.id.hike_distance_editText)).getText().toString();
         hikeTime = ((EditText)findViewById(R.id.hike_time_editText)).getText().toString();
 
+        HikeDataSource hike_db = new HikeDataSource(this);
+        hike_db.open();
+        int hikeId = hike_db.getNbHike();
+        Log.w("hikeId in CREATEHIKE", Integer.toString(hikeId));
         Intent n = new Intent(getApplicationContext(), CreateHikeDetailsActivity.class);
         n.putExtra("hikeId",hikeId);
         n.putExtra("hikeName", hikeName);
         n.putExtra("hikeDistance", hikeDistance);
         n.putExtra("hikeTime", hikeTime);
-        hikeId++;
         startActivity(n);
     }
 

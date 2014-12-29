@@ -33,32 +33,32 @@
         <activity
             android:name=".CreateHikeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_create_hike"
-            android:theme="@style/FullscreenTheme" >
+            android:label="@string/title_activity_create_hike">
+           <!-- android:theme="@style/FullscreenTheme" > -->
         </activity>
         <activity
             android:name=".StartHikeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_start_hike"
-            android:theme="@style/FullscreenTheme" >
+            android:label="@string/title_activity_start_hike">
+          <!--  android:theme="@style/FullscreenTheme" > -->
         </activity>
         <activity
             android:name=".MenuActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_menu"
-            android:theme="@style/FullscreenTheme" >
+            android:label="@string/title_activity_menu">
+        <!--  android:theme="@style/FullscreenTheme" > -->
         </activity>
         <activity
             android:name=".DetailHikeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_detail_hike"
-            android:theme="@style/FullscreenTheme" >
+            android:label="@string/title_activity_detail_hike">
+        <!--  android:theme="@style/FullscreenTheme" > -->
         </activity>
         <activity
             android:name=".CreateHikeDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_create_hike_details"
-            android:theme="@style/FullscreenTheme" >
+            android:label="@string/title_activity_create_hike_details">
+        <!--  android:theme="@style/FullscreenTheme" > -->
         </activity>
     </application>
 

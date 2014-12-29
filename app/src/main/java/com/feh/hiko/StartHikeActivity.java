@@ -46,7 +46,7 @@ public class StartHikeActivity extends Activity  {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_start_hike);
 
 
 
@@ -63,8 +63,10 @@ public class StartHikeActivity extends Activity  {
         //we fetch hikes to the listView
         List<Hike> hikes = dataSource.getAllHike();
 
+        Log.w("HIKES",hikes.toString());
         lw_hike = (ListView) findViewById(R.id.listViewHike);
         ArrayAdapter<Hike> adapter = new ArrayAdapter<Hike>(this,android.R.layout.simple_list_item_1,hikes);
+    //    Log.w("ADAPTER",adapter.toString());
         lw_hike.setAdapter(adapter);
 
         dataSource.close();

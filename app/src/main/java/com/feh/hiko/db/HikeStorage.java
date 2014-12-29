@@ -22,11 +22,11 @@ public class HikeStorage extends SQLiteOpenHelper {
             "CREATE TABLE " + HIKE_TABLE  +
              "( _id integer primary key autoincrement, " +
             "HIKE_NAME TEXT, " +
-            "HIKE_DISTANCE  INTEGER, " +
-            "HIKE_TIME INTEGER, " +
+            "HIKE_DISTANCE  REAL, " +
+            "HIKE_TIME REAL, " +
             "HIKE_LOCATION INTEGER);";
 
-    private static final int DB_VERSION = 11;
+    private static final int DB_VERSION = 13;
 
     public HikeStorage(Context context) {
         super(context,"hikes.db",null,DB_VERSION);
