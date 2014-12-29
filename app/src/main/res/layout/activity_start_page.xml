@@ -28,4 +28,25 @@
         android:onClick="startMenuActivity"
         android:text="@string/start_button" />
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/french_flag_imageView"
+        android:src="@drawable/french_flag" android:contentDescription="french_flag"
+        android:layout_below="@+id/start_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="setFrLanguage"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/us_flag_imageView"
+        android:src="@drawable/american_flag" android:contentDescription="us_flag"
+        android:layout_alignRight="@+id/start_logo"
+        android:layout_alignEnd="@+id/start_logo"
+        android:onClick="setUsLanguage"
+        android:layout_below="@+id/start_button" />
+
+
 </RelativeLayout>

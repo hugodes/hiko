@@ -10,14 +10,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:text="Start Hike"
+        android:text="@string/start_hike"
         android:id="@+id/start_hike_button"
         android:onClick="startHikeActivity"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="112dp"
-        android:text="Create Hike"
+        android:text="@string/create_hike"
         android:id="@+id/create_hike_button"
         android:onClick="createHikeActivity"
 
@@ -28,7 +28,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:text="Settings"
+        android:text="@string/action_settings"
         android:id="@+id/settings_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"

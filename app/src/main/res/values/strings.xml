@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- GENERAL -->
     <string name="app_name">hiko</string>
     <string name="hello_world">Hello Force et Honneur</string>
     <string name="action_settings">Settings</string>
+
+    <!-- START PAGE -->
     <string name="title_activity_start_page">StartPageActivity</string>
     <string name="start_button">Start</string>
+
+    <!-- MENU PAGE -->
     <string name="title_activity_menu">MenuActivity</string>
+    <string name="start_hike">Start Hike</string>
+    <string name="create_hike">Create Hike</string>
+
+    <!-- CREATE HIKE PAGE -->
     <string name="title_activity_create_hike">CreateHikeActivity</string>
-    <string name="title_activity_start_hike">StartHikeActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_detail_hike">DetailHikeActivity</string>
+    <string name="hike_name">Hike Name</string>
+    <string name="hike_distance">Hike Distance\nkm</string>
+    <string name="hike_time">Hike Time\nmin</string>
+    <string name="validate">Validate</string>
+
+    <!-- CREATE HIKE DETAIL PAGE -->
     <string name="title_activity_create_hike_details">CreateHikeDetailsActivity</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="add_location">add location</string>
+
+    <!-- START HIKE PAGE -->
+    <string name="title_activity_start_hike">StartHikeActivity</string>
+
+    <!-- DETAIL HIKE PAGE -->
+    <string name="title_activity_detail_hike">DetailHikeActivity</string>
 
 </resources>

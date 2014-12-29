@@ -2,12 +2,16 @@ package com.feh.hiko;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
+
+import java.util.Locale;
 
 public class StartPageActivity extends Activity {
 
@@ -22,7 +26,29 @@ public class StartPageActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_start_page);
+
+
 	}
+
+    public void setFrLanguage(View view){
+        Locale locale = new Locale("fr-FR");
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getApplicationContext().getResources().updateConfiguration(config, null);
+        ((TextView)findViewById(R.id.start_button)).setText(R.string.start_button);
+
+    }
+
+    public void setUsLanguage(View view)
+    {
+        Locale locale = new Locale("en-US");
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getApplicationContext().getResources().updateConfiguration(config, null);
+        ((TextView)findViewById(R.id.start_button)).setText(R.string.start_button);
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
