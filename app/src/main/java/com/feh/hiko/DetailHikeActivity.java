@@ -1,43 +1,35 @@
 package com.feh.hiko;
 
 import com.feh.hiko.db.Coord;
-import com.feh.hiko.db.Hike;
 import com.feh.hiko.db.HikeDataSource;
-import com.feh.hiko.db.Location;
-import com.feh.hiko.util.SystemUiHider;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Vector;
 
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
- */
+
 public class DetailHikeActivity extends Activity {
 
 
+    /*
+     * communication with the db
+     */
     private HikeDataSource dataSource;
 
+    /*
+     * will contain the details of each hike
+     */
     private ListView lw_loc;
 
     @Override
@@ -50,11 +42,10 @@ public class DetailHikeActivity extends Activity {
 
         setContentView(R.layout.activity_detail_hike);
 
-        //Added by theoz 25/12/2015
+        //we get the position of the correct element clicked previously
         Intent intent = getIntent();
         int position = intent.getIntExtra("position",0);
 
-        Log.i("Position",Integer.toString(position));
 
 
         //we open the database
@@ -67,8 +58,10 @@ public class DetailHikeActivity extends Activity {
             Log.w("SQLExeception",e);
         }
 
+        //We get the different points stored in the db for a specific position
         Vector<Coord> vCoord = dataSource.getLocationForId(position);
 
+        //We attach the result to a listView
         lw_loc = (ListView) findViewById(R.id.listViewLoc);
         ArrayAdapter<Coord> adapter = new ArrayAdapter<Coord>(this,android.R.layout.simple_list_item_1,vCoord);
         lw_loc.setAdapter(adapter);

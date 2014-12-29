@@ -4,7 +4,6 @@ import com.feh.hiko.db.Hike;
 import com.feh.hiko.db.HikeDataSource;
 import com.feh.hiko.db.Location;
 import com.feh.hiko.db.Coord;
-import com.feh.hiko.util.SystemUiHider;
 
 import android.app.Activity;
 import android.content.Intent;
