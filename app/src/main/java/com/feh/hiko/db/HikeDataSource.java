@@ -70,6 +70,14 @@ public class HikeDataSource {
         long iId = db.insert(HikeStorage.HIKE_TABLE, null, values);
     }
 
+    public int getNbHike()
+    {
+        int cpt = 0;
+        Cursor cursor = db.query(HikeStorage.HIKE_TABLE,allColumns,null,null,null,null,null);
+        cpt = cursor.getCount();
+        return cpt;
+    }
+
     public List<Hike> getAllHike(){
 
         List<Hike> hikes = new ArrayList<Hike>();
@@ -118,8 +126,8 @@ public class HikeDataSource {
         Hike hike = new Hike();
         hike.setId(cursor.getLong(0));
         hike.setHikeName(cursor.getString(1));
-        hike.setTotalDistance(cursor.getInt(2));
-        hike.setTotalTime(cursor.getInt(3));
+        hike.setTotalDistance(cursor.getFloat(2));
+        hike.setTotalTime(cursor.getFloat(3));
         //hike.(cursor.getLong(4));
         return hike;
     }

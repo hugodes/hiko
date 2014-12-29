@@ -7,12 +7,12 @@ public class Hike {
 
     private long id;
     private String hikeName;
-    private int totalDistance;
-    private int totalTime;
+    private float totalDistance;
+    private float totalTime;
 
     private Location locations;
 
-    public Hike(long p_id,String p_HikeName,int p_totalDistance,int p_totalTime,Location locationsId)
+    public Hike(long p_id,String p_HikeName,float p_totalDistance,float p_totalTime,Location locationsId)
     {
         id = p_id;
         hikeName = p_HikeName;
@@ -44,15 +44,16 @@ public class Hike {
     {
         this.locations = locations;
     }
+
     public String getHikeName(){
         return hikeName;
     }
 
-    public int getTotalDistance(){
+    public float getTotalDistance(){
         return totalDistance;
     }
 
-    public int getTotalTime(){
+    public float getTotalTime(){
         return totalTime;
     }
 
@@ -61,11 +62,11 @@ public class Hike {
 
     }
 
-    public void setTotalDistance(int pTotalDistance){
+    public void setTotalDistance(float pTotalDistance){
         totalDistance = pTotalDistance;
     }
 
-    public void setTotalTime(int pTotalTime){
+    public void setTotalTime(float pTotalTime){
         totalTime = pTotalTime;
     }
 
