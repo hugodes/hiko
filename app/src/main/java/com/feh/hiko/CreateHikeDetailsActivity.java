@@ -88,6 +88,7 @@ public class CreateHikeDetailsActivity extends Activity {
         //We get information from the last page
         Intent intent = getIntent();
         int hikeId = intent.getIntExtra("hikeId",0);
+        Log.w("hikeId in CREATE DETAILS ACTIVITY",Integer.toString(hikeId));
         String hikeName = intent.getStringExtra("hikeName");
         String hikeTime = intent.getStringExtra("hikeTime");
         String hikeDistance = intent.getStringExtra("hikeDistance");
@@ -101,7 +102,7 @@ public class CreateHikeDetailsActivity extends Activity {
             Log.w("SQLException", e);
         }
 
-        dataSource.createHike(new Hike(hikeId,hikeName,Integer.parseInt(hikeDistance), Integer.parseInt(hikeTime),locate));
+        dataSource.createHike(new Hike(hikeId,hikeName,Float.parseFloat(hikeDistance), Float.parseFloat(hikeTime),locate));
 
         dataSource.close();
 
