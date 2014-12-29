@@ -26,7 +26,7 @@ public class HikeStorage extends SQLiteOpenHelper {
             "HIKE_TIME INTEGER, " +
             "HIKE_LOCATION INTEGER);";
 
-    private static final int DB_VERSION = 10;
+    private static final int DB_VERSION = 11;
 
     public HikeStorage(Context context) {
         super(context,"hikes.db",null,DB_VERSION);
