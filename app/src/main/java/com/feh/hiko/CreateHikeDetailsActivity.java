@@ -67,6 +67,7 @@ public class CreateHikeDetailsActivity extends Activity
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        mGoogleApiClient.setMockMode(true);
     }
 
     @Override
