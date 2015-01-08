@@ -49,3 +49,9 @@ build/
 .idea/misc.xml
 app/app.iml
 
+
+
+# # NodeJS
+node_modules/
+
+
