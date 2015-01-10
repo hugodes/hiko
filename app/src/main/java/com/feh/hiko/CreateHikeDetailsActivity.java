@@ -108,12 +108,6 @@ public class CreateHikeDetailsActivity extends Activity
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    protected void startLocationUpdates() {
-        // The final argument to {@code requestLocationUpdates()} is a LocationListener
-        // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
-    }
 
     @Override
     protected void onStart() {
@@ -147,7 +141,6 @@ public class CreateHikeDetailsActivity extends Activity
 
         Log.i(TAG, "Connected to GoogleApiClient");
         if (mCurrentLocation == null) {
-            Log.i(TAG, "je suis ici");
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             updateUI();
         }
@@ -165,6 +158,15 @@ public class CreateHikeDetailsActivity extends Activity
             ((EditText)findViewById(R.id.point1_editText)).setText("-1");
             ((EditText)findViewById(R.id.point2_editText)).setText("-1");
         }*/
+    }
+
+
+    protected void startLocationUpdates() {
+        // The final argument to {@code requestLocationUpdates()} is a LocationListener
+        // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
+        Log.i(TAG, "je suis ici");
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
     }
 
     @Override
