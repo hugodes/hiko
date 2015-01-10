@@ -39,6 +39,7 @@ public class StartPageActivity extends Activity {
 		setContentView(R.layout.activity_start_page);
         IOManager ioManager = new IOManager("http://10.0.2.2:3000");
         ioManager.runIO();
+
     }
 
     public void setFrLanguage(View view){

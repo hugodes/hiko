@@ -228,8 +228,7 @@ public class CreateHikeDetailsActivity extends Activity
         String point1 = ((EditText)findViewById(R.id.point1_editText)).getText().toString();
         String point2 = ((EditText)findViewById(R.id.point2_editText)).getText().toString();
         locate.addCoord(new Coord(Float.parseFloat(point1),Float.parseFloat(point2)));
-        ((EditText)findViewById(R.id.point1_editText)).setText("");
-        ((EditText)findViewById(R.id.point2_editText)).setText("");
+        updateUI();
 
 
     }
