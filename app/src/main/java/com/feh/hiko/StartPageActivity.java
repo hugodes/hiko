@@ -11,7 +11,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.feh.hiko.io.IOManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
 import java.util.Locale;
+
+import io.socket.IOAcknowledge;
+import io.socket.IOCallback;
+import io.socket.SocketIO;
+import io.socket.SocketIOException;
 
 public class StartPageActivity extends Activity {
 
@@ -26,9 +37,9 @@ public class StartPageActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_start_page);
-
-
-	}
+        IOManager ioManager = new IOManager("http://10.0.2.2:3000");
+        ioManager.runIO();
+    }
 
     public void setFrLanguage(View view){
         Locale locale = new Locale("fr-FR");
