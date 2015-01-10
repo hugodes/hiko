@@ -8,7 +8,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationRequest;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,13 +22,17 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.util.Date;
 
 
 public class CreateHikeDetailsActivity extends Activity
         implements  ConnectionCallbacks,
-                    OnConnectionFailedListener{
+                    OnConnectionFailedListener,
+                    LocationListener {
     /**
 
 
@@ -35,7 +41,28 @@ public class CreateHikeDetailsActivity extends Activity
      */
     protected GoogleApiClient mGoogleApiClient;
     protected static final String TAG = "basic-location-sample";
+    /**
+     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
+     */
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
 
+    /**
+     * The fastest rate for active location updates. Exact. Updates will never be more frequent
+     * than this value.
+     */
+    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+
+    // Keys for storing activity state in the Bundle.
+    protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
+    protected final static String LOCATION_KEY = "location-key";
+    protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
+
+    /**
+     * Stores parameters for requests to the FusedLocationProviderApi.
+     */
+    protected LocationRequest mLocationRequest;
+    protected android.location.Location mCurrentLocation;
     protected android.location.Location mLastLocation;
     protected String mLatitudeText;
     protected String mLongitudeText;
@@ -56,17 +83,49 @@ public class CreateHikeDetailsActivity extends Activity
     }
 
     protected synchronized void buildGoogleApiClient() {
+        Log.i(TAG, "Building GoogleApiClient");
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        createLocationRequest();
     }
+
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+
+        // Sets the desired interval for active location updates. This interval is
+        // inexact. You may not receive updates at all if no location sources are available, or
+        // you may receive them slower than requested. You may also receive updates faster than
+        // requested if other applications are requesting location at a faster interval.
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        // Sets the fastest rate for active location updates. This interval is exact, and your
+        // application will never receive updates faster than this value.
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        //mGoogleApiClient.setMockMode(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Within {@code onPause()}, we pause location updates, but leave the
+        // connection to GoogleApiClient intact.  Here, we resume receiving
+        // location updates if the user has requested them.
+
+        if (mGoogleApiClient.isConnected()) {
+            startLocationUpdates();
+        }
     }
 
     @Override
@@ -79,17 +138,50 @@ public class CreateHikeDetailsActivity extends Activity
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        Log.i(TAG, "Connected to GoogleApiClient");
+        if (mCurrentLocation == null) {
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            updateUI();
+        }
+
+        startLocationUpdates();
+
+        /*mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             mLatitudeText = String.valueOf(mLastLocation.getLatitude());
             mLongitudeText = String.valueOf(mLastLocation.getLongitude());
             ((EditText)findViewById(R.id.point1_editText)).setText(mLatitudeText);
             ((EditText)findViewById(R.id.point2_editText)).setText(mLongitudeText);
         }
-        else {
+        else if (mLastLocation == null){
             ((EditText)findViewById(R.id.point1_editText)).setText("-1");
             ((EditText)findViewById(R.id.point2_editText)).setText("-1");
-        }
+        }*/
+    }
+
+
+    protected void startLocationUpdates() {
+        // The final argument to {@code requestLocationUpdates()} is a LocationListener
+        // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
+        Log.i(TAG, "je suis ici");
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onLocationChanged(android.location.Location location) {
+        mCurrentLocation = location;
+        updateUI();
+
+    }
+
+    private void updateUI() {
+        mLatitudeText = String.valueOf(mCurrentLocation.getLatitude());
+        mLongitudeText = String.valueOf(mCurrentLocation.getLongitude());
+        ((EditText)findViewById(R.id.point1_editText)).setText(mLatitudeText);
+        ((EditText)findViewById(R.id.point2_editText)).setText(mLongitudeText);
+
     }
 
     @Override
