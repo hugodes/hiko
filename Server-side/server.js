@@ -16,7 +16,7 @@ var mongoose = require('mongoose');
 /********************************************************
 * DATABASE PART
 *********************************************************/
- 
+
 
  mongoose.connect('mongodb://localhost/hikoTestDb', function(err) {
 		  if (err) { throw err; }
@@ -27,15 +27,16 @@ var hikeSchema = new mongoose.Schema({
   name: String,
   // used get & set to conversion to be able to store float number
   totalDistance: {type: Number, get: getConversion, set: setConversion },
-  totalTime: {type: Number, get: getConversion, set: setConversion} 
+  totalTime: {type: Number, get: getConversion, set: setConversion}
 
 });
 
 var locationSchema = new mongoose.Schema({
 	_id : Number,
 	hikeId : Number,
-	latitude : {type: Number, get: getConversion, set: setConversion },
-	longitude : {type: Number, get: getConversion, set: setConversion }
+	longitude : {type: Number, get: getConversion, set: setConversion },
+    latitude : {type: Number, get: getConversion, set: setConversion }
+
 
 });
 
@@ -49,23 +50,23 @@ function setConversion(num){
 }
 
 
- 
+
 // Creating model for an hike
 var hikeModel = mongoose.model('hikes', hikeSchema);
 
 // Creating model for a location
 var locationModel = mongoose.model('locations', locationSchema);
-																																				
+
 /********************************************************
 * USED FOR TEST ONLY
 *********************************************************/
-/*	
+/*
 // Creating example , for testing comment/uncomment Creating / Displaying (one action at the same time)
 var newHike = new hikeModel({ _id : 1 });
 newHike.name = 'First Hike';
 newHike.totalDistance = 23.45;
 newHike.totalTime = 20.56;
- 
+
  /*
 // We saving in the mongoDB db
 newHike.save(function (err) {
@@ -147,7 +148,7 @@ locationToAdd.save(function (err){
 io.on('connection', function(socket){
   console.log('a user connected');
 
-  
+
   	socket.on('set_db', function (data){
   		var queryLocation = locationModel.find(null);
      queryLocation.exec(function (err, locations){
@@ -165,7 +166,7 @@ io.on('connection', function(socket){
 	 var query = hikeModel.find(null);
 	query.exec(function (err, hikes) {
 	 if (err) { console.log(err); }
-	 
+
 	// console.log(hikes);
 		if (hikes != null){
 			for (var i=0;i<hikes.length;i++)
@@ -181,23 +182,26 @@ io.on('connection', function(socket){
 				console.log(hikes[i]);
 			}
 		}
-	 
+
 	});
 
   	});
-     
- // socket.emit('news', { hello: 'world' });	
+
+ // socket.emit('news', { hello: 'world' });
 
 
   socket.on('add_location', function (data){
-  
-  	var locationToAdd = new locationModel();
+
+      	var locationToAdd = new locationModel();
   	locationToAdd._id = data.id;
   	locationToAdd.hikeId = data.hikeId;
   	locationToAdd.longitude = data.longitude;
-  	locationToAdd.latitutde = data.latitude;
+  	locationToAdd.latitude = data.latitude;
   	locationToAdd.save(function (err ) {
   		if (err ) { throw err; }
+        console.log("data - " + data.latitude + data.longitude );
+        console.log("locationToAdd - " + locationToAdd.latitude)
+
   		console.log(' location added with succes');
   	//	mongoose.connection.close();
   	});
@@ -209,7 +213,7 @@ io.on('connection', function(socket){
 
   //listener for the event add_db
   socket.on('add_db', function (data) {
-  		
+
   		var hikeToAdd = new hikeModel();
 		hikeToAdd._id = data.id;
 		hikeToAdd.name = data.name;
@@ -222,7 +226,7 @@ io.on('connection', function(socket){
 	//		mongoose.connection.close();
 
 		});
-          
+
   });
 
 
