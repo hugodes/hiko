@@ -2,10 +2,17 @@ package com.feh.hiko;
 
 import com.feh.hiko.db.Coord;
 import com.feh.hiko.db.HikeDataSource;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,13 +26,14 @@ import java.util.Vector;
 
 
 
-public class DetailHikeActivity extends Activity {
-
+public class DetailHikeActivity extends FragmentActivity
+        implements OnMapReadyCallback {
 
     /*
      * communication with the db
      */
     private HikeDataSource dataSource;
+    Vector<Coord> vCoord;
 
     /*
      * will contain the details of each hike
@@ -36,11 +44,16 @@ public class DetailHikeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_detail_hike);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         //we get the position of the correct element clicked previously
         Intent intent = getIntent();
@@ -59,15 +72,23 @@ public class DetailHikeActivity extends Activity {
         }
 
         //We get the different points stored in the db for a specific position
-        Vector<Coord> vCoord = dataSource.getLocationForId(position);
+        vCoord = dataSource.getLocationForId(position);
 
         //We attach the result to a listView
-        lw_loc = (ListView) findViewById(R.id.listViewLoc);
+        /*lw_loc = (ListView) findViewById(R.id.listViewLoc);
         ArrayAdapter<Coord> adapter = new ArrayAdapter<Coord>(this,android.R.layout.simple_list_item_1,vCoord);
-        lw_loc.setAdapter(adapter);
+        lw_loc.setAdapter(adapter);*/
 
 
         dataSource.close();
+    }
+    @Override
+    public void onMapReady(GoogleMap map) {
+        for (Coord c : vCoord) {
+            map.addMarker(new MarkerOptions()
+            .position(new LatLng(c.getPoint1(), c.getPoint2()))
+            .title("Marker"));
+        }
     }
 
 
