@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,21 +12,20 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.feh.hiko.io.IOManager;
+import com.feh.hiko.db.HikeDataSource;
+import com.feh.hiko.io.MyApplication;
+import com.feh.hiko.io.MySingleton;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.MalformedURLException;
+import java.sql.SQLException;
 import java.util.Locale;
-
-import io.socket.IOAcknowledge;
-import io.socket.IOCallback;
-import io.socket.SocketIO;
-import io.socket.SocketIOException;
 
 public class StartPageActivity extends Activity {
 
+       /*
+     * member for the communication with the database
+     */
+
+    private HikeDataSource dataSource;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,8 +37,28 @@ public class StartPageActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_start_page);
-        IOManager ioManager = new IOManager("http://10.0.2.2:3000");
-        ioManager.runIO();
+
+
+
+  /*      //Trying AsyncTask
+        ServerASyncTask server_sync = new ServerASyncTask();
+        server_sync.execute();*/
+
+        dataSource = new HikeDataSource(this);
+        try {
+            dataSource.open();
+        }
+        catch(SQLException e)
+        {
+            Log.w("SQLExeception", e);
+        }
+
+
+        //Database synchronisation
+        MyApplication app = (MyApplication)getApplication(); //to remove i think
+        MySingleton.getInstance().setDataSource(dataSource);
+        MySingleton.getInstance().getDbFromServer();
+
 
     }
 

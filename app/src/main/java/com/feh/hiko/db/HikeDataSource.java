@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.json.JSONException;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,26 +18,30 @@ import java.util.Vector;
  */
 public class HikeDataSource {
 
+
     private HikeStorage dbHelper;
     private LocationStorage dbStorageHelper;
 
     private SQLiteDatabase dbLocations;
     private SQLiteDatabase db;
 
-    private String[] allColumnsLocation = {LocationStorage.COLUMN_HIKEID,LocationStorage.COLUMN_POINT1,LocationStorage.COLUMN_POINT2};
+    private String[] allColumnsLocation = {LocationStorage.COLUMN_ID,LocationStorage.COLUMN_HIKEID,LocationStorage.COLUMN_POINT1,LocationStorage.COLUMN_POINT2};
     private String[] allColumns = {HikeStorage.COLUMN_ID,HikeStorage.COLUMN_NAME,HikeStorage.COLUMN_DISTANCE,
-            HikeStorage.COLUMN_TIME,HikeStorage.COLUMN_LOCATION};
+            HikeStorage.COLUMN_TIME};
 
     public HikeDataSource(Context context){
         dbHelper = new HikeStorage(context);
         dbStorageHelper = new LocationStorage(context);
+
     }
 
     public void open() throws SQLException {
         db = dbHelper.getWritableDatabase();
         dbLocations = dbStorageHelper.getWritableDatabase();
-        Log.w("succes","HERE");
+
     }
+
+
 
     public void close()
     {
@@ -44,10 +50,34 @@ public class HikeDataSource {
         dbStorageHelper.close();
     }
 
-    public void createHike(Hike hikeToAdd)
-    {
+
+    public void addHikePhoneDb(Hike hikeToAdd){
+        //On créer les locations
+        ContentValues values = new ContentValues();
+        values.put(HikeStorage.COLUMN_ID,hikeToAdd.getId());
+        values.put(HikeStorage.COLUMN_NAME,hikeToAdd.getHikeName());
+        values.put(HikeStorage.COLUMN_DISTANCE,hikeToAdd.getTotalDistance());
+        values.put(HikeStorage.COLUMN_TIME,hikeToAdd.getTotalTime());
+        long iId = db.insert(HikeStorage.HIKE_TABLE, null, values);
+
+
+    }
+
+    public void addLocationPhoneDb(Coord locationToAdd){
+        ContentValues valuesLocation = new ContentValues();
+        valuesLocation.put(LocationStorage.COLUMN_ID,locationToAdd.getId());
+        valuesLocation.put(LocationStorage.COLUMN_HIKEID,locationToAdd.getHikeId());
+        valuesLocation.put(LocationStorage.COLUMN_POINT1,locationToAdd.getPoint1());
+        valuesLocation.put(LocationStorage.COLUMN_POINT2,locationToAdd.getPoint2());
+        long idLoc = dbLocations.insert(LocationStorage.LOCATION_TABLE,null,valuesLocation);
+    }
+
+
+    public void createHike(Hike hikeToAdd) throws JSONException {
         //On créer les locations
         ContentValues valuesLocation = new ContentValues();
+
+
 
 
         Vector<Coord> lCoords = hikeToAdd.getLocations().getlCoords();
@@ -58,18 +88,30 @@ public class HikeDataSource {
             valuesLocation.put(LocationStorage.COLUMN_POINT2,lCoords.get(i).getPoint2());
             long idLoc = dbLocations.insert(LocationStorage.LOCATION_TABLE,null,valuesLocation);
             Log.w("hikeId",Long.toString(hikeToAdd.getId()));
+
+            //provisoir ajout de chaque location dans la bdd server (optimisation possible : le faire en une fois)
+         //   ioManager.addLocationToDb(hikeToAdd.getId(),lCoords.get(i).getPoint1(),lCoords.get(i).getPoint2());
         }
+
+
+
 
         ContentValues values = new ContentValues();
         values.put(HikeStorage.COLUMN_NAME,hikeToAdd.getHikeName());
         values.put(HikeStorage.COLUMN_DISTANCE,hikeToAdd.getTotalDistance());
         values.put(HikeStorage.COLUMN_TIME,hikeToAdd.getTotalTime());
-        values.put(HikeStorage.COLUMN_LOCATION,hikeToAdd.getLocations().getId());
 
       //  Log.w("test", values.toString() + HikeStorage.HIKE_TABLE);
         long iId = db.insert(HikeStorage.HIKE_TABLE, null, values);
+
+
     }
 
+    public int getNbLocations(){
+
+        Cursor cursor = dbLocations.query(LocationStorage.LOCATION_TABLE,allColumnsLocation,null,null,null,null,null);
+        return cursor.getCount();
+    }
     public int getNbHike()
     {
         int cpt = 0;
@@ -78,6 +120,29 @@ public class HikeDataSource {
         return cpt;
     }
 
+    public boolean isLocationsExist(long id){
+        Cursor cursor = dbLocations.query(LocationStorage.LOCATION_TABLE,allColumnsLocation,LocationStorage.COLUMN_ID + "=" + id,
+                null, null, null, null);
+        if (cursor.getCount()> 0) {
+            return true;
+        }
+        else
+            return false;
+
+    }
+
+    public boolean isHikeExist(long id){
+        Cursor cursor = db.query(HikeStorage.HIKE_TABLE,allColumns,HikeStorage.COLUMN_ID + "=" + id,
+                null, null, null, null);
+        if (cursor.getCount() == 0) {
+            System.out.println("HERE ");
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }
     public List<Hike> getAllHike(){
 
         List<Hike> hikes = new ArrayList<Hike>();
@@ -106,10 +171,8 @@ public class HikeDataSource {
         cursor.moveToFirst();
         while(!cursor.isAfterLast())
         {
-            Coord nCoord = new Coord(cursor.getFloat(1),cursor.getFloat(2));
+            Coord nCoord = new Coord(cursor.getLong(0),cursor.getLong(1),cursor.getFloat(2),cursor.getFloat(3));
             vCoord.add(nCoord);
-            String test = Float.toString(cursor.getFloat(1));
-            Log.w("Cursor",test);
             cursor.moveToNext();
         }
         return vCoord;

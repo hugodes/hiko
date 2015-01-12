@@ -4,6 +4,7 @@ import com.feh.hiko.db.Coord;
 import com.feh.hiko.db.Hike;
 import com.feh.hiko.db.HikeDataSource;
 import com.feh.hiko.db.Location;
+import com.feh.hiko.io.MySingleton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -24,6 +25,8 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Date;
@@ -34,9 +37,6 @@ public class CreateHikeDetailsActivity extends Activity
                     OnConnectionFailedListener,
                     LocationListener {
     /**
-
-
-    /*
      * Will contain the different Location Point
      */
     protected GoogleApiClient mGoogleApiClient;
@@ -67,7 +67,9 @@ public class CreateHikeDetailsActivity extends Activity
     protected String mLatitudeText;
     protected String mLongitudeText;
 
-    Location locate = new Location();
+    HikeDataSource dataSource;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,14 @@ public class CreateHikeDetailsActivity extends Activity
 
         setContentView(R.layout.activity_create_hike_details);
         buildGoogleApiClient();
+        dataSource = new HikeDataSource(this);
+        try {
+            dataSource.open();
+        }
+        catch(SQLException e)
+        {
+            Log.w("SQLException", e);
+        }
 
     }
 
@@ -222,20 +232,32 @@ public class CreateHikeDetailsActivity extends Activity
     }
 
 
-    public void addLocation(View view)
-    {
+    public void addLocation(View view) throws JSONException {
 
         String point1 = ((EditText)findViewById(R.id.point1_editText)).getText().toString();
         String point2 = ((EditText)findViewById(R.id.point2_editText)).getText().toString();
-        locate.addCoord(new Coord(Float.parseFloat(point1),Float.parseFloat(point2)));
+
+
         updateUI();
+
+        int coordId = dataSource.getNbLocations() + 1;
+        Intent intent = getIntent();
+        long hikeId = intent.getLongExtra("hikeId",0);
+        dataSource.addLocationPhoneDb(new Coord(coordId,hikeId,Float.parseFloat(point1),Float.parseFloat(point2)));
+
+        //adding to server
+        MySingleton.getInstance().addLocationToDb(coordId,hikeId,Float.parseFloat(point1),Float.parseFloat(point2));
+       // dataSource.addLocationServer(new Coord(coordId, hikeId, Float.parseFloat(point1), Float.parseFloat(point2)));
+        ((EditText)findViewById(R.id.point1_editText)).setText("");
+        ((EditText)findViewById(R.id.point2_editText)).setText("");
+
 
 
     }
 
-    public void addHikeDb(View view)
-    {
-        //We get information from the last page
+    public void addHikeDb(View view) throws JSONException {
+
+   /*//We get information from the last page
         Intent intent = getIntent();
         int hikeId = intent.getIntExtra("hikeId",0);
         Log.w("hikeId in CREATE DETAILS ACTIVITY",Integer.toString(hikeId));
@@ -243,18 +265,11 @@ public class CreateHikeDetailsActivity extends Activity
         String hikeTime = intent.getStringExtra("hikeTime");
         String hikeDistance = intent.getStringExtra("hikeDistance");
 
-        HikeDataSource dataSource = new HikeDataSource(this);
-        try {
-            dataSource.open();
-        }
-        catch(SQLException e)
-        {
-            Log.w("SQLException", e);
-        }
+
 
         dataSource.createHike(new Hike(hikeId,hikeName,Float.parseFloat(hikeDistance), Float.parseFloat(hikeTime),locate));
 
-        dataSource.close();
+        dataSource.close();*/
 
         Intent Nintent = new Intent(this,MenuActivity.class);
         startActivity(Nintent);
