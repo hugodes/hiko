@@ -4,6 +4,8 @@ import com.feh.hiko.db.Hike;
 import com.feh.hiko.db.HikeDataSource;
 import com.feh.hiko.db.Location;
 import com.feh.hiko.db.Coord;
+import com.feh.hiko.io.MyApplication;
+import com.feh.hiko.io.MySingleton;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +17,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+
+import org.json.JSONException;
 
 import java.sql.SQLException;
 
@@ -70,20 +74,21 @@ public class CreateHikeActivity extends Activity {
     }
 
 
-    public void createHikeDetailsActivity(View view) throws SQLException {
+    public void createHikeDetailsActivity(View view) throws SQLException, JSONException {
         hikeName = ((EditText)findViewById(R.id.hike_name_editText)).getText().toString();
         hikeDistance = ((EditText)findViewById(R.id.hike_distance_editText)).getText().toString();
         hikeTime = ((EditText)findViewById(R.id.hike_time_editText)).getText().toString();
 
         HikeDataSource hike_db = new HikeDataSource(this);
         hike_db.open();
-        int hikeId = hike_db.getNbHike();
-        Log.w("hikeId in CREATEHIKE", Integer.toString(hikeId));
+        long hikeId = hike_db.getNbHike();
+        hikeId++;
+        Hike hikeToAdd = new Hike(hikeId,hikeName,Float.valueOf(hikeDistance),Float.valueOf(hikeTime));
+        Log.w("hikeId in CREATEHIKE", hikeToAdd.toString());
+        hike_db.addHikePhoneDb(hikeToAdd);
+        MySingleton.getInstance().addHikeToDb(hikeToAdd);
         Intent n = new Intent(getApplicationContext(), CreateHikeDetailsActivity.class);
         n.putExtra("hikeId",hikeId);
-        n.putExtra("hikeName", hikeName);
-        n.putExtra("hikeDistance", hikeDistance);
-        n.putExtra("hikeTime", hikeTime);
         startActivity(n);
     }
 

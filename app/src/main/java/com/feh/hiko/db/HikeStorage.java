@@ -16,17 +16,15 @@ public class HikeStorage extends SQLiteOpenHelper {
     public static final String COLUMN_TIME = "HIKE_TIME";
 
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_LOCATION = "HIKE_LOCATION";
 
     private static final String HIKE_TABLE_CREATE =
             "CREATE TABLE " + HIKE_TABLE  +
-             "( _id integer primary key autoincrement, " +
+             "( _id integer, " +
             "HIKE_NAME TEXT, " +
             "HIKE_DISTANCE  REAL, " +
-            "HIKE_TIME REAL, " +
-            "HIKE_LOCATION INTEGER);";
+            "HIKE_TIME REAL);";
 
-    private static final int DB_VERSION = 13;
+    private static final int DB_VERSION = 28;
 
     public HikeStorage(Context context) {
         super(context,"hikes.db",null,DB_VERSION);

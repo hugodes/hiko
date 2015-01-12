@@ -12,8 +12,7 @@
         android:glEsVersion="0x00020000"
         android:required="true"/>
 
-
-    <application>
+    <application android:name="com.feh.hiko.io.MyApplication">
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data  android:name="com.google.android.gms.version"

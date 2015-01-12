@@ -7,7 +7,9 @@ import java.util.Vector;
  */
 public class Location {
 
-    private static long id = 0;
+
+
+    private  long hikeId = 0;
 
     Vector<Coord> lCoords = new Vector<Coord>();
 
@@ -18,11 +20,14 @@ public class Location {
     public void addCoord(Coord p_coord)
     {
         lCoords.add(p_coord);
-        id++;
     }
 
-    public long getId() {
-        return id;
+    public long getHikeId() {
+        return hikeId;
+    }
+
+    public void setHikeId(long hikeId){
+        this.hikeId = hikeId;
     }
 
 
@@ -33,7 +38,7 @@ public class Location {
 
     public String toString()
     {
-        return id + " " + lCoords.size();
+         return String.valueOf(lCoords.size());
     }
 
 

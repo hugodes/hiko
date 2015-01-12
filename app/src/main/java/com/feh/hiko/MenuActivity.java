@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.feh.hiko.io.MyApplication;
+import com.feh.hiko.io.MySingleton;
+
 
 public class MenuActivity extends Activity {
 
@@ -22,6 +25,8 @@ public class MenuActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_menu);
+    //    MyApplication app = (MyApplication)getApplication();
+      //  MySingleton.getInstance().customSingletonMethod();
     }
 
 

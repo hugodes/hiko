@@ -12,13 +12,12 @@ public class Hike {
 
     private Location locations;
 
-    public Hike(long p_id,String p_HikeName,float p_totalDistance,float p_totalTime,Location locationsId)
+    public Hike(long p_id,String p_HikeName,float p_totalDistance,float p_totalTime)
     {
         id = p_id;
         hikeName = p_HikeName;
         totalDistance = p_totalDistance;
         totalTime = p_totalTime;
-        this.locations = locationsId;
     }
 
     public Hike(){}
