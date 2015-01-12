@@ -54,7 +54,7 @@ public class MySingleton
     {
         // Constructor hidden because this is a singleton
         try {
-            socket = new SocketIO("http://10.0.2.2:3000");
+            socket = new SocketIO("http://192.168.1.94:3000");
             socket.connect(new IOCallback() {
                 @Override
                 public void onMessage(JSONObject json, IOAcknowledge ack) {
