@@ -2,9 +2,6 @@ package com.feh.hiko;
 
 import com.feh.hiko.db.Hike;
 import com.feh.hiko.db.HikeDataSource;
-import com.feh.hiko.db.Location;
-import com.feh.hiko.db.Coord;
-import com.feh.hiko.io.MyApplication;
 import com.feh.hiko.io.MySingleton;
 
 import android.app.Activity;

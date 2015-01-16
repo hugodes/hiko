@@ -10,7 +10,6 @@ public class Hike {
     private float totalDistance;
     private float totalTime;
 
-    private Location locations;
 
     public Hike(long p_id,String p_HikeName,float p_totalDistance,float p_totalTime)
     {
@@ -33,16 +32,6 @@ public class Hike {
     }
 
 
-
-    public Location getLocations()
-    {
-        return locations;
-    }
-
-    public void setLocations(Location locations)
-    {
-        this.locations = locations;
-    }
 
     public String getHikeName(){
         return hikeName;
@@ -71,7 +60,7 @@ public class Hike {
 
     public String toString()
     {
-        return id + " " + hikeName + " " + totalDistance + " " + totalTime + " " ;// locations.getlCoords().size();
+        return id + " " + hikeName + " " + totalDistance + " " + totalTime + " " ;
     }
 
 }
