@@ -27,7 +27,7 @@ import java.util.Vector;
 
 
 
-public class DetailHikeActivity extends FragmentActivity
+public class HikeActivity extends FragmentActivity
         implements OnMapReadyCallback {
 
     /*
@@ -85,10 +85,11 @@ public class DetailHikeActivity extends FragmentActivity
     }
     @Override
     public void onMapReady(GoogleMap map) {
+        map.setMyLocationEnabled(true);
         for (Coord c : vCoord) {
             map.addMarker(new MarkerOptions()
-            .position(new LatLng(c.getPoint1(), c.getPoint2()))
-            .title("Marker"));
+                    .position(new LatLng(c.getPoint1(), c.getPoint2()))
+                    .title("Marker"));
         }
     }
 
