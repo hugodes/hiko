@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.feh.hiko.db.HikeDataSource;
 import com.feh.hiko.io.MyApplication;
 import com.feh.hiko.io.MySingleton;
-import com.feh.hiko.io.SocketIO;
 
 
 import java.net.URISyntaxException;
