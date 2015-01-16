@@ -1,9 +1,7 @@
 package com.feh.hiko;
 
 import com.feh.hiko.db.Coord;
-import com.feh.hiko.db.Hike;
 import com.feh.hiko.db.HikeDataSource;
-import com.feh.hiko.db.Location;
 import com.feh.hiko.io.MySingleton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,13 +21,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONException;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.util.Date;
 
 
 public class CreateHikeDetailsActivity extends Activity

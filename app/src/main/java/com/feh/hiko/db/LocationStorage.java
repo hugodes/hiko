@@ -16,7 +16,7 @@ public class LocationStorage extends SQLiteOpenHelper
     public static final String COLUMN_POINT1 = "LOC_POINT1";
     public static final String COLUMN_POINT2 = "LOC_POINT2";
 
-    private static final int DB_VERSION = 27;
+    private static final int DB_VERSION = 30;
 
     private static final String LOCATION_TABLE_CREATE =
             "CREATE TABLE " + LOCATION_TABLE  +

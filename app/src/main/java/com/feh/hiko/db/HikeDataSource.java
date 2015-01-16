@@ -73,39 +73,6 @@ public class HikeDataSource {
     }
 
 
-    public void createHike(Hike hikeToAdd) throws JSONException {
-        //On créer les locations
-        ContentValues valuesLocation = new ContentValues();
-
-
-
-
-        Vector<Coord> lCoords = hikeToAdd.getLocations().getlCoords();
-
-        for(int i=0;i<lCoords.size();i++){
-            valuesLocation.put(LocationStorage.COLUMN_HIKEID,hikeToAdd.getId());
-            valuesLocation.put(LocationStorage.COLUMN_POINT1,lCoords.get(i).getPoint1());
-            valuesLocation.put(LocationStorage.COLUMN_POINT2,lCoords.get(i).getPoint2());
-            long idLoc = dbLocations.insert(LocationStorage.LOCATION_TABLE,null,valuesLocation);
-            Log.w("hikeId",Long.toString(hikeToAdd.getId()));
-
-            //provisoir ajout de chaque location dans la bdd server (optimisation possible : le faire en une fois)
-         //   ioManager.addLocationToDb(hikeToAdd.getId(),lCoords.get(i).getPoint1(),lCoords.get(i).getPoint2());
-        }
-
-
-
-
-        ContentValues values = new ContentValues();
-        values.put(HikeStorage.COLUMN_NAME,hikeToAdd.getHikeName());
-        values.put(HikeStorage.COLUMN_DISTANCE,hikeToAdd.getTotalDistance());
-        values.put(HikeStorage.COLUMN_TIME,hikeToAdd.getTotalTime());
-
-      //  Log.w("test", values.toString() + HikeStorage.HIKE_TABLE);
-        long iId = db.insert(HikeStorage.HIKE_TABLE, null, values);
-
-
-    }
 
     public int getNbLocations(){
 
@@ -159,7 +126,7 @@ public class HikeDataSource {
 
     public Vector<Coord> getLocationForId(long hikeId)
     {
-        Location locations = new Location();
+
 
         Vector<Coord> vCoord = new Vector<Coord>();
 

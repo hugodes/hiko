@@ -15,7 +15,10 @@ import android.widget.TextView;
 import com.feh.hiko.db.HikeDataSource;
 import com.feh.hiko.io.MyApplication;
 import com.feh.hiko.io.MySingleton;
+import com.feh.hiko.io.SocketIO;
 
+
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Locale;
 
@@ -26,7 +29,10 @@ public class StartPageActivity extends Activity {
      */
 
     private HikeDataSource dataSource;
-	@Override
+
+
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -58,6 +64,9 @@ public class StartPageActivity extends Activity {
         MyApplication app = (MyApplication)getApplication(); //to remove i think
         MySingleton.getInstance().setDataSource(dataSource);
         MySingleton.getInstance().getDbFromServer();
+
+
+
 
 
     }

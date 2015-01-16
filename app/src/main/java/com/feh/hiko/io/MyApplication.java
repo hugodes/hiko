@@ -5,6 +5,8 @@ package com.feh.hiko.io;
  */
 import android.app.Application;
 
+import java.net.URISyntaxException;
+
 public class MyApplication extends Application
 {
     @Override
@@ -14,11 +16,14 @@ public class MyApplication extends Application
 
         // Initialize the singletons so their instances
         // are bound to the application process.
-        initSingletons();
+        try {
+            initSingletons();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
-    protected void initSingletons()
-    {
+    protected void initSingletons() throws URISyntaxException {
         // Initialize the instance of MySingleton
         MySingleton.initInstance();
     }
