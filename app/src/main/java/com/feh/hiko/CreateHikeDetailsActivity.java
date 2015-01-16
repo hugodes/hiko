@@ -252,20 +252,6 @@ public class CreateHikeDetailsActivity extends Activity
 
     public void addHikeDb(View view) throws JSONException {
 
-   /*//We get information from the last page
-        Intent intent = getIntent();
-        int hikeId = intent.getIntExtra("hikeId",0);
-        Log.w("hikeId in CREATE DETAILS ACTIVITY",Integer.toString(hikeId));
-        String hikeName = intent.getStringExtra("hikeName");
-        String hikeTime = intent.getStringExtra("hikeTime");
-        String hikeDistance = intent.getStringExtra("hikeDistance");
-
-
-
-        dataSource.createHike(new Hike(hikeId,hikeName,Float.parseFloat(hikeDistance), Float.parseFloat(hikeTime),locate));
-
-        dataSource.close();*/
-
         Intent Nintent = new Intent(this,MenuActivity.class);
         startActivity(Nintent);
 

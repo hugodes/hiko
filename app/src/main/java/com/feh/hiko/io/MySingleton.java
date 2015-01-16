@@ -130,7 +130,7 @@ public class MySingleton
         json.put("latitude",latitude);
         json.put("longitude",longitude);
 
-   //     socket.emit("add_location",json);
+        sock.emit("add_location",json);
     }
 
 
@@ -143,15 +143,10 @@ public class MySingleton
         json.put("totalDistance",hikeToAdd.getTotalDistance());
         json.put("totalTime",hikeToAdd.getTotalTime());
 
-   //     socket.emit("add_db", json);
+        sock.emit("add_db", json);
 
     }
 
-    public void customSingletonMethod()
-    {
-        // Custom method
-        Log.i("Singleton","We are in the singleton");
-   //     socket.emit("coucou","ici");
-    }
+
 }
 
