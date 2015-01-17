@@ -1,5 +1,10 @@
 package com.feh.hiko.io;
 
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 
 import com.feh.hiko.db.Coord;
@@ -10,8 +15,12 @@ import com.feh.hiko.db.HikeDataSource;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URISyntaxException;
 
+import com.feh.hiko.db.Picture;
 import com.google.gson.Gson;
 
 
@@ -32,10 +41,14 @@ public class MySingleton
 
 //    private SocketIO socket;
     private HikeDataSource dataSource;
+    private Context mContext;
     Socket sock;
 
   //  IO socket;
 
+    public void setContext(Context context){
+        mContext = context;
+    }
     public static void initInstance() {
         if (instance == null)
         {
@@ -60,6 +73,7 @@ public class MySingleton
             //http://nodesocketapplication-hiko.rhcloud.com:8000 net
             sock = IO.socket("http://nodesocketapplication-hiko.rhcloud.com:8000");
 
+      //      sock = IO.socket("http://192.168.1.32:3000");
             System.out.println("HERE AVANT CONNECT ");
             //Place all events here as per documention
             sock.on(Socket.EVENT_CONNECT, new Emitter.Listener(){
@@ -81,11 +95,36 @@ public class MySingleton
                         if (getDb().isHikeExist(hikeToAdd.getId())){
                         Log.w("HIKE","ALREADY EXIST");
 
+
                     }
                     else {
-                       getDb().addHikePhoneDb(hikeToAdd);
+                        getDb().addHikePhoneDb(hikeToAdd);
+                        JSONObject json = new JSONObject();
+                        try {
+                            json.put("id",hikeToAdd.getId());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        sock.emit("get_picture_for_id", json);
                         Log.w("ADDING HIKE = ", hikeToAdd.toString());
                     }
+
+                }
+            });
+
+            //route to add in the phone database
+            sock.on("set_picture", new Emitter.Listener(){
+                @Override
+                public void call(Object... args){
+                    Gson myGson = new Gson();
+                    Picture pictureToAdd = myGson.fromJson(args[0].toString(),Picture.class);
+                    byte[] decodedByte = Base64.decode(pictureToAdd.getPicture(), 0);
+                    Bitmap photo = BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+                    String namePhoto = String.valueOf(pictureToAdd.getCoordId()) + "_" + String.valueOf(pictureToAdd.getHikeId()) + ".jpg";
+                    saveToInternalSorage(photo,namePhoto);
+                    Log.w("PICTURE","SAVING PICTURE " + namePhoto);
+
 
                 }
             });
@@ -115,6 +154,19 @@ public class MySingleton
         }
     }
 
+    public void addPictureToTheServer(Bitmap photo,long coordId,long hikeId) throws JSONException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+        JSONObject json = new JSONObject();
+        json.put("coordId",coordId);
+        json.put("hikeId",hikeId);
+        json.put("picture",encodedImage);
+
+        sock.emit("add_picture",json);
+    }
     public HikeDataSource getDb(){
         return dataSource;
     }
@@ -139,12 +191,36 @@ public class MySingleton
 
         JSONObject json = new JSONObject();
         json.put("id",hikeToAdd.getId());
-        json.put("name",hikeToAdd.getHikeName());
+        json.put("hikeName",hikeToAdd.getHikeName());
         json.put("totalDistance",hikeToAdd.getTotalDistance());
         json.put("totalTime",hikeToAdd.getTotalTime());
 
         sock.emit("add_db", json);
 
+    }
+    private String saveToInternalSorage(Bitmap bitmapImage,String namePhoto){
+
+        ContextWrapper cw = new ContextWrapper(mContext);
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+
+
+        File mypath=new File(directory,namePhoto);
+
+        FileOutputStream fos = null;
+        try {
+
+            fos = new FileOutputStream(mypath);
+
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Saving on " + directory.getAbsolutePath().toString() + " " + namePhoto);
+        return directory.getAbsolutePath();
     }
 
 

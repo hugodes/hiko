@@ -1,15 +1,23 @@
 package com.feh.hiko;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.feh.hiko.db.HikeDataSource;
@@ -17,8 +25,15 @@ import com.feh.hiko.io.MyApplication;
 import com.feh.hiko.io.MySingleton;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class StartPageActivity extends Activity {
@@ -29,6 +44,7 @@ public class StartPageActivity extends Activity {
 
     private HikeDataSource dataSource;
 
+    ImageView mImageView;
 
 
     @Override
@@ -45,10 +61,6 @@ public class StartPageActivity extends Activity {
 
 
 
-  /*      //Trying AsyncTask
-        ServerASyncTask server_sync = new ServerASyncTask();
-        server_sync.execute();*/
-
         dataSource = new HikeDataSource(this);
         try {
             dataSource.open();
@@ -63,6 +75,11 @@ public class StartPageActivity extends Activity {
         MyApplication app = (MyApplication)getApplication(); //to remove i think
         MySingleton.getInstance().setDataSource(dataSource);
         MySingleton.getInstance().getDbFromServer();
+        MySingleton.getInstance().setContext(getApplicationContext());
+
+        mImageView = (ImageView)findViewById(R.id.imageView1);
+
+     //   loadImageFromStorage("/data/data/com.feh.hiko/app_imageDir","44_13.jpg");
 
 
 
@@ -78,16 +95,30 @@ public class StartPageActivity extends Activity {
         getApplicationContext().getResources().updateConfiguration(config, null);
         ((TextView)findViewById(R.id.start_button)).setText(R.string.start_button);
 
+
+
+
+
+
     }
+
 
     public void setUsLanguage(View view)
     {
+
         Locale locale = new Locale("en-US");
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
         getApplicationContext().getResources().updateConfiguration(config, null);
         ((TextView)findViewById(R.id.start_button)).setText(R.string.start_button);
+
+   /*     Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, 1888);*/
+
+
+
+
     }
 
 	@Override
