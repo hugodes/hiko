@@ -12,7 +12,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationRequest;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,9 +25,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 
 
@@ -65,6 +74,10 @@ public class CreateHikeDetailsActivity extends Activity
     HikeDataSource dataSource;
 
 
+    private ImageView mImageView;
+    private Bitmap mPhoto;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +97,7 @@ public class CreateHikeDetailsActivity extends Activity
         {
             Log.w("SQLException", e);
         }
+        mImageView = (ImageView) findViewById(R.id.imageView1);
 
     }
 
@@ -141,6 +155,54 @@ public class CreateHikeDetailsActivity extends Activity
         }
     }
 
+    private String saveToInternalSorage(Bitmap bitmapImage,String namePhoto){
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+
+
+        File mypath=new File(directory,namePhoto);
+
+        FileOutputStream fos = null;
+        try {
+
+            fos = new FileOutputStream(mypath);
+
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Saving on " + directory.getAbsolutePath().toString() + " " + namePhoto);
+        return directory.getAbsolutePath();
+    }
+
+    private void loadImageFromStorage(String path,String namePhoto)
+    {
+
+        try {
+            File f=new File(path, namePhoto);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            ImageView img=(ImageView)findViewById(R.id.imageView1);
+            img.setImageBitmap(b);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1888 && resultCode == RESULT_OK) {
+            mPhoto = (Bitmap) data.getExtras().get("data");
+            mImageView.setImageBitmap(mPhoto);
+
+        }
+    }
     @Override
     public void onConnected(Bundle connectionHint) {
 
@@ -227,6 +289,10 @@ public class CreateHikeDetailsActivity extends Activity
     }
 
 
+    public void takePicture(View view){
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, 1888);
+    }
     public void addLocation(View view) throws JSONException {
 
         String point1 = ((EditText)findViewById(R.id.point1_editText)).getText().toString();
@@ -245,6 +311,16 @@ public class CreateHikeDetailsActivity extends Activity
        // dataSource.addLocationServer(new Coord(coordId, hikeId, Float.parseFloat(point1), Float.parseFloat(point2)));
         ((EditText)findViewById(R.id.point1_editText)).setText("");
         ((EditText)findViewById(R.id.point2_editText)).setText("");
+
+        String namePhoto = String.valueOf(coordId) + "_" + String.valueOf(hikeId) + ".jpg";
+        saveToInternalSorage(mPhoto,namePhoto);
+        loadImageFromStorage("/data/data/com.feh.hiko/app_imageDir", namePhoto);
+        MySingleton.getInstance().setContext(getApplicationContext());
+        try {
+            MySingleton.getInstance().addPictureToTheServer(mPhoto,coordId,hikeId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
 
