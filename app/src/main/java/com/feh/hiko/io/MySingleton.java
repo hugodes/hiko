@@ -65,7 +65,7 @@ public class MySingleton
         try{
             //http://192.168.1.32:3000 local
             //http://nodesocketapplication-hiko.rhcloud.com:8000 net
-            sock = IO.socket("http://nodesocketapplication-hiko.rhcloud.com:8000");
+             sock = IO.socket("http://nodesocketapplication-hiko.rhcloud.com:8000");
 
         //    sock = IO.socket("http://192.168.1.32:3000");
             //Place all events here as per documention
