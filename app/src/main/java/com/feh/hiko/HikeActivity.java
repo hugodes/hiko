@@ -2,6 +2,12 @@ package com.feh.hiko;
 
 import com.feh.hiko.db.Coord;
 import com.feh.hiko.db.HikeDataSource;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingApi;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
@@ -10,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -23,18 +30,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 
 
 public class HikeActivity extends FragmentActivity
-        implements OnMapReadyCallback {
+        implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     /*
      * communication with the db
      */
     private HikeDataSource dataSource;
     Vector<Coord> vCoord;
+    private GoogleApiClient mGoogleApiClient;
+    public String TAG = "hike activity";
+    List<Geofence> geofencesList;
 
     /*
      * will contain the details of each hike
@@ -50,7 +63,7 @@ public class HikeActivity extends FragmentActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_detail_hike);
+        setContentView(R.layout.activity_hike);
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -82,6 +95,23 @@ public class HikeActivity extends FragmentActivity
 
 
         dataSource.close();
+
+        buildGoogleApiClient();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+        //mGoogleApiClient.setMockMode(true);
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        Log.i(TAG, "Building GoogleApiClient");
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build();
     }
     @Override
     public void onMapReady(GoogleMap map) {
@@ -124,4 +154,36 @@ public class HikeActivity extends FragmentActivity
     }
 
 
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.i(TAG, "trolololol--------------------");
+        geofencesList = new ArrayList<Geofence>();
+        for (Coord c : vCoord) {
+            Geofence geo = new Geofence.Builder()
+                    .setCircularRegion(c.getPoint1(), c.getPoint2(), 500)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                    .setRequestId(String.valueOf(c.getId()))
+                    .build();
+            geofencesList.add(geo);
+        }
+        Intent intent = new Intent();
+        intent.setClass(this.getApplicationContext(), LocationDetailsActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this.getApplicationContext(), 0, intent, 0);
+        GeofencingRequest geofencingRequest = new GeofencingRequest.Builder()
+                .addGeofences(geofencesList)
+                .build();
+        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, geofencingRequest, pendingIntent);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+    }
 }

@@ -13,27 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <RelativeLayout
-        android:id="@+id/belowlayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right|center_horizontal"
-            android:background="#359c5e"
-            android:layout_marginBottom="14dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="14dp"
-            android:text="@string/start_hike"
-            android:textColor="#ffffff"
-            android:onClick="startHike" />
-    </RelativeLayout>
 
 
 </RelativeLayout>
