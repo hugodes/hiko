@@ -2,8 +2,14 @@ package com.feh.hiko;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingEvent;
+
+import java.util.List;
 
 
 public class LocationDetailsActivity extends Activity {
@@ -12,6 +18,9 @@ public class LocationDetailsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_details);
+        List<Geofence> list = GeofencingEvent.fromIntent(getIntent()).getTriggeringGeofences();
+        int id = Integer.valueOf(list.get(0).getRequestId());
+        // A toi theo, t'as l'id
     }
 
 
