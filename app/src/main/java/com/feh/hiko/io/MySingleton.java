@@ -67,7 +67,7 @@ public class MySingleton
             //http://nodesocketapplication-hiko.rhcloud.com:8000 net
              sock = IO.socket("http://nodesocketapplication-hiko.rhcloud.com:8000");
 
-        //    sock = IO.socket("http://192.168.1.32:3000");
+        //sock = IO.socket("http://192.168.1.32:3000");
             //Place all events here as per documention
             sock.on(Socket.EVENT_CONNECT, new Emitter.Listener(){
                 @Override
@@ -109,9 +109,9 @@ public class MySingleton
                     Bitmap photo = BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
                     String namePhoto = String.valueOf(coordToAdd.getId()) + "_" + String.valueOf(coordToAdd.getHikeId()) + ".jpg";
                     saveToInternalSorage(photo,namePhoto);
-                    System.out.println("Coord to Add " + coordToAdd);
-                    if (getDb().isHikeExist(coordToAdd.getId())){
-                        Log.w("HIKE","ALREADY EXIST");
+                //    System.out.println("Coord to Add " + coordToAdd);
+                    if (getDb().isLocationsExist(coordToAdd.getId())){
+                        Log.w("COORD","COORD ALREADY EXIST");
 
                     }
                     else {

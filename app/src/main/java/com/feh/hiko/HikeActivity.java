@@ -71,7 +71,6 @@ public class HikeActivity extends FragmentActivity
         //we get the position of the correct element clicked previously
         Intent intent = getIntent();
         int position = intent.getIntExtra("position",0);
-        position++; // id start to 1 ,so we have to ++ position
 
 
         Log.i("Position clicked",String.valueOf(position));

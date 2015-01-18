@@ -254,8 +254,8 @@ public class CreateHikeDetailsActivity extends Activity
     private void updateUI() {
         mLatitudeText = String.valueOf(mCurrentLocation.getLatitude());
         mLongitudeText = String.valueOf(mCurrentLocation.getLongitude());
-        ((EditText)findViewById(R.id.point1_editText)).setText(mLatitudeText);
-        ((EditText)findViewById(R.id.point2_editText)).setText(mLongitudeText);
+        ((EditText)findViewById(R.id.latitude_editText)).setText(mLatitudeText);
+        ((EditText)findViewById(R.id.longitude_editText)).setText(mLongitudeText);
 
     }
 
@@ -306,6 +306,9 @@ public class CreateHikeDetailsActivity extends Activity
         String latitude = ((EditText)findViewById(R.id.latitude_editText)).getText().toString();
         String longitude = ((EditText)findViewById(R.id.longitude_editText)).getText().toString();
 
+        float test = Float.valueOf(latitude);
+
+        System.out.println("ICI JEAN PIERRE" + String.valueOf(test));
 
         updateUI();
 
@@ -331,8 +334,8 @@ public class CreateHikeDetailsActivity extends Activity
 
             //adding to server
             MySingleton.getInstance().addLocationToDb(coordId, hikeId, Float.parseFloat(latitude), Float.parseFloat(longitude), encodedImage, mEditTextComment.getText().toString());
-            ((EditText) findViewById(R.id.point1_editText)).setText("");
-            ((EditText) findViewById(R.id.point2_editText)).setText("");
+            ((EditText) findViewById(R.id.latitude_editText)).setText("");
+            ((EditText) findViewById(R.id.longitude_editText)).setText("");
             mEditTextComment.setText("");
         }
 
