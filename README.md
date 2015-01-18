@@ -28,3 +28,5 @@ geo fix -121.45356 46.51119
 ## By Theo Chartier & Hugo DesLongchamps
 
 ## Help us to improve
+
+## Feel free to report bug
