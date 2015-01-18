@@ -159,7 +159,7 @@ public class HikeActivity extends FragmentActivity
         geofencesList = new ArrayList<Geofence>();
         for (Coord c : vCoord) {
             Geofence geo = new Geofence.Builder()
-                    .setCircularRegion(c.getPoint1(), c.getPoint2(), 500)
+                    .setCircularRegion(c.getPoint1(), c.getPoint2(), 10)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .setRequestId(String.valueOf(c.getId()))
