@@ -303,13 +303,13 @@ public class CreateHikeDetailsActivity extends Activity
     }
     public void addLocation(View view) throws JSONException {
 
-        String point1 = ((EditText)findViewById(R.id.point1_editText)).getText().toString();
-        String point2 = ((EditText)findViewById(R.id.point2_editText)).getText().toString();
+        String latitude = ((EditText)findViewById(R.id.latitude_editText)).getText().toString();
+        String longitude = ((EditText)findViewById(R.id.longitude_editText)).getText().toString();
 
 
         updateUI();
 
-        if(point1.equals("") || point2.equals("")){
+        if(latitude.equals("") || longitude.equals("")){
 
             Toast.makeText(getApplicationContext(), R.string.validateException, Toast.LENGTH_LONG).show();
 
@@ -327,10 +327,10 @@ public class CreateHikeDetailsActivity extends Activity
             byte[] imageBytes = baos.toByteArray();
             String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-            dataSource.addLocationPhoneDb(new Coord(coordId, hikeId, Float.parseFloat(point1), Float.parseFloat(point2), encodedImage, mEditTextComment.getText().toString()));
+            dataSource.addLocationPhoneDb(new Coord(coordId, hikeId, Float.parseFloat(latitude), Float.parseFloat(longitude), encodedImage, mEditTextComment.getText().toString()));
 
             //adding to server
-            MySingleton.getInstance().addLocationToDb(coordId, hikeId, Float.parseFloat(point1), Float.parseFloat(point2), encodedImage, mEditTextComment.getText().toString());
+            MySingleton.getInstance().addLocationToDb(coordId, hikeId, Float.parseFloat(latitude), Float.parseFloat(longitude), encodedImage, mEditTextComment.getText().toString());
             ((EditText) findViewById(R.id.point1_editText)).setText("");
             ((EditText) findViewById(R.id.point2_editText)).setText("");
             mEditTextComment.setText("");

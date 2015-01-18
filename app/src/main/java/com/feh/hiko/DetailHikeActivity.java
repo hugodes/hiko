@@ -86,8 +86,9 @@ public class DetailHikeActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap map) {
         for (Coord c : vCoord) {
+            Log.i("coordonnées", "lat = "+c.getLatitude()+" long = "+c.getLongitude());
             map.addMarker(new MarkerOptions()
-            .position(new LatLng(c.getPoint1(), c.getPoint2()))
+            .position(new LatLng(c.getLatitude(), c.getLongitude()))
             .title("Marker"));
         }
     }

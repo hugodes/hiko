@@ -67,8 +67,8 @@ public class HikeDataSource {
         ContentValues valuesLocation = new ContentValues();
         valuesLocation.put(LocationStorage.COLUMN_ID,locationToAdd.getId());
         valuesLocation.put(LocationStorage.COLUMN_HIKEID,locationToAdd.getHikeId());
-        valuesLocation.put(LocationStorage.COLUMN_POINT1,locationToAdd.getPoint1());
-        valuesLocation.put(LocationStorage.COLUMN_POINT2,locationToAdd.getPoint2());
+        valuesLocation.put(LocationStorage.COLUMN_LATITUDE,locationToAdd.getLatitude());
+        valuesLocation.put(LocationStorage.COLUMN_LONGITUDE,locationToAdd.getLongitude());
         valuesLocation.put(LocationStorage.COLUMN_PICTURE,locationToAdd.getPicture());
         valuesLocation.put(LocationStorage.COLUMN_COMMENT,locationToAdd.getComment());
         long idLoc = dbLocations.insert(LocationStorage.LOCATION_TABLE,null,valuesLocation);
