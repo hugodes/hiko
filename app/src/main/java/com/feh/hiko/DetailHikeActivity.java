@@ -36,6 +36,7 @@ public class DetailHikeActivity extends FragmentActivity
     private HikeDataSource dataSource;
     Vector<Coord> vCoord;
 
+    int position;
     /*
      * will contain the details of each hike
      */
@@ -57,7 +58,7 @@ public class DetailHikeActivity extends FragmentActivity
 
         //we get the position of the correct element clicked previously
         Intent intent = getIntent();
-        int position = intent.getIntExtra("position",0);
+        position = intent.getIntExtra("position",0);
         position++; // id start to 1 ,so we have to ++ position
 
 
@@ -86,8 +87,9 @@ public class DetailHikeActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap map) {
         for (Coord c : vCoord) {
+            Log.i("coordonnées", "lat = "+c.getLatitude()+" long = "+c.getLongitude());
             map.addMarker(new MarkerOptions()
-            .position(new LatLng(c.getPoint1(), c.getPoint2()))
+            .position(new LatLng(c.getLatitude(), c.getLongitude()))
             .title("Marker"));
         }
     }
@@ -114,11 +116,11 @@ public class DetailHikeActivity extends FragmentActivity
 
         return super.onOptionsItemSelected(item);
     }
-
     /** Called when the user clicks the Start Hike Button */
     public void startHike(View view) {
         // Do something in response to button
         Intent intent = new Intent(this, HikeActivity.class);
+        intent.putExtra("position", position);
         startActivity(intent);
     }
 

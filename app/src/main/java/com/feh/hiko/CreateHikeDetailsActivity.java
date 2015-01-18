@@ -254,8 +254,8 @@ public class CreateHikeDetailsActivity extends Activity
     private void updateUI() {
         mLatitudeText = String.valueOf(mCurrentLocation.getLatitude());
         mLongitudeText = String.valueOf(mCurrentLocation.getLongitude());
-        ((EditText)findViewById(R.id.point1_editText)).setText(mLatitudeText);
-        ((EditText)findViewById(R.id.point2_editText)).setText(mLongitudeText);
+        ((EditText)findViewById(R.id.latitude_editText)).setText(mLatitudeText);
+        ((EditText)findViewById(R.id.longitude_editText)).setText(mLongitudeText);
 
     }
 
@@ -303,13 +303,16 @@ public class CreateHikeDetailsActivity extends Activity
     }
     public void addLocation(View view) throws JSONException {
 
-        String point1 = ((EditText)findViewById(R.id.point1_editText)).getText().toString();
-        String point2 = ((EditText)findViewById(R.id.point2_editText)).getText().toString();
+        String latitude = ((EditText)findViewById(R.id.latitude_editText)).getText().toString();
+        String longitude = ((EditText)findViewById(R.id.longitude_editText)).getText().toString();
 
+        float test = Float.valueOf(latitude);
+
+        System.out.println("ICI JEAN PIERRE" + String.valueOf(test));
 
         updateUI();
 
-        if(point1.equals("") || point2.equals("")){
+        if(latitude.equals("") || longitude.equals("")){
 
             Toast.makeText(getApplicationContext(), R.string.validateException, Toast.LENGTH_LONG).show();
 
@@ -327,12 +330,12 @@ public class CreateHikeDetailsActivity extends Activity
             byte[] imageBytes = baos.toByteArray();
             String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-            dataSource.addLocationPhoneDb(new Coord(coordId, hikeId, Float.parseFloat(point1), Float.parseFloat(point2), encodedImage, mEditTextComment.getText().toString()));
+            dataSource.addLocationPhoneDb(new Coord(coordId, hikeId, Float.parseFloat(latitude), Float.parseFloat(longitude), encodedImage, mEditTextComment.getText().toString()));
 
             //adding to server
-            MySingleton.getInstance().addLocationToDb(coordId, hikeId, Float.parseFloat(point1), Float.parseFloat(point2), encodedImage, mEditTextComment.getText().toString());
-            ((EditText) findViewById(R.id.point1_editText)).setText("");
-            ((EditText) findViewById(R.id.point2_editText)).setText("");
+            MySingleton.getInstance().addLocationToDb(coordId, hikeId, Float.parseFloat(latitude), Float.parseFloat(longitude), encodedImage, mEditTextComment.getText().toString());
+            ((EditText) findViewById(R.id.latitude_editText)).setText("");
+            ((EditText) findViewById(R.id.longitude_editText)).setText("");
             mEditTextComment.setText("");
         }
 

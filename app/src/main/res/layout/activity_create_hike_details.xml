@@ -11,9 +11,9 @@
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:ems="10"
-            android:id="@+id/point1_editText"
+            android:id="@+id/latitude_editText"
             android:layout_gravity="center_horizontal|top"
-            android:layout_alignTop="@+id/point1_textView"
+            android:layout_alignTop="@+id/latitude_textView"
             android:layout_toRightOf="@+id/add_location_button"
             android:layout_toEndOf="@+id/add_location_button" />
 
@@ -22,9 +22,9 @@
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:ems="10"
-            android:id="@+id/point2_editText"
+            android:id="@+id/longitude_editText"
             android:layout_gravity="center"
-            android:layout_alignBottom="@+id/point2_textView"
+            android:layout_alignBottom="@+id/longitude_textView"
             android:layout_toRightOf="@+id/add_location_button"
             android:layout_toEndOf="@+id/add_location_button" />
 
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/latitude"
-            android:id="@+id/point1_textView"
+            android:id="@+id/latitude_textView"
             android:layout_gravity="left|top"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -44,9 +44,9 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/longitude"
-            android:id="@+id/point2_textView"
+            android:id="@+id/longitude_textView"
             android:layout_gravity="left|center_vertical"
-            android:layout_below="@+id/point1_editText"
+            android:layout_below="@+id/latitude_editText"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/point2_editText"></ImageView>
+        android:layout_below="@+id/longitude_editText"></ImageView>
 
         <Button
             android:layout_width="wrap_content"

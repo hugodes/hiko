@@ -71,7 +71,6 @@ public class HikeActivity extends FragmentActivity
         //we get the position of the correct element clicked previously
         Intent intent = getIntent();
         int position = intent.getIntExtra("position",0);
-        position++; // id start to 1 ,so we have to ++ position
 
 
         Log.i("Position clicked",String.valueOf(position));
@@ -118,7 +117,7 @@ public class HikeActivity extends FragmentActivity
         map.setMyLocationEnabled(true);
         for (Coord c : vCoord) {
             map.addMarker(new MarkerOptions()
-                    .position(new LatLng(c.getPoint1(), c.getPoint2()))
+                    .position(new LatLng(c.getLatitude(), c.getLongitude()))
                     .title("Marker"));
         }
     }
@@ -159,7 +158,7 @@ public class HikeActivity extends FragmentActivity
         geofencesList = new ArrayList<Geofence>();
         for (Coord c : vCoord) {
             Geofence geo = new Geofence.Builder()
-                    .setCircularRegion(c.getPoint1(), c.getPoint2(), 35)
+                    .setCircularRegion(c.getLatitude(), c.getLongitude(), 35)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .setRequestId(String.valueOf(c.getId()))
