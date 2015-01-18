@@ -41,8 +41,8 @@ public class LocationDetailsActivity extends Activity {
         try {
             dataSource.open();
             Coord coord = dataSource.getSingleCoordForId(id);
-            ((TextView)findViewById(R.id.longitude_textView)).setText(String.valueOf(coord.getPoint1()));
-            ((TextView)findViewById(R.id.latitude_textView)).setText(String.valueOf(coord.getPoint2()));
+            ((TextView)findViewById(R.id.longitude_textView)).setText(String.valueOf(coord.getLongitude()));
+            ((TextView)findViewById(R.id.latitude_textView)).setText(String.valueOf(coord.getLatitude()));
             ((TextView)findViewById(R.id.comment_textView)).setText(String.valueOf(coord.getComment()));
             String namePhoto = String.valueOf(coord.getId()) + "_" + String.valueOf(coord.getHikeId()) + ".jpg";
             loadImageFromStorage("/data/data/com.feh.hiko/app_imageDir",namePhoto);

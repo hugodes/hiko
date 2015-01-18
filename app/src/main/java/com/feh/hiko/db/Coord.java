@@ -15,12 +15,12 @@ public class Coord {
     public String comment;
 
 
-    public Coord(long id,long hikeId,float p_point1,float p_point2,String picture,String comment)
+    public Coord(long id,long hikeId,float latitude,float longitude,String picture,String comment)
     {
         this.id = id;
         this.hikeId = hikeId;
-        this.longitude = p_point1;
-        this.latitude = p_point2;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.picture = picture;
         this.comment = comment;
     }
@@ -43,20 +43,20 @@ public class Coord {
     public long getHikeId(){
         return this.hikeId;
     }
-    public float getPoint1() {
+    public float getLongitude() {
         return this.longitude;
     }
 
-    public float getPoint2() {
+    public float getLatitude() {
         return this.latitude;
     }
 
-    public void setPoint1(float point1) {
-        this.longitude = point1;
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
     }
 
-    public void setPoint2(float point2) {
-        this.latitude = point2;
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
     }
 
     public void setComment(String comment){

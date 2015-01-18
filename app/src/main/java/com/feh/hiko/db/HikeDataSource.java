@@ -25,7 +25,7 @@ public class HikeDataSource {
     private SQLiteDatabase dbLocations;
     private SQLiteDatabase db;
 
-    private String[] allColumnsLocation = {LocationStorage.COLUMN_ID,LocationStorage.COLUMN_HIKEID,LocationStorage.COLUMN_POINT1,LocationStorage.COLUMN_POINT2,LocationStorage.COLUMN_PICTURE,LocationStorage.COLUMN_COMMENT};
+    private String[] allColumnsLocation = {LocationStorage.COLUMN_ID,LocationStorage.COLUMN_HIKEID,LocationStorage.COLUMN_LATITUDE,LocationStorage.COLUMN_LONGITUDE,LocationStorage.COLUMN_PICTURE,LocationStorage.COLUMN_COMMENT};
     private String[] allColumns = {HikeStorage.COLUMN_ID,HikeStorage.COLUMN_NAME,HikeStorage.COLUMN_DISTANCE,
             HikeStorage.COLUMN_TIME};
 
@@ -67,8 +67,8 @@ public class HikeDataSource {
         ContentValues valuesLocation = new ContentValues();
         valuesLocation.put(LocationStorage.COLUMN_ID,locationToAdd.getId());
         valuesLocation.put(LocationStorage.COLUMN_HIKEID,locationToAdd.getHikeId());
-        valuesLocation.put(LocationStorage.COLUMN_POINT1,locationToAdd.getPoint1());
-        valuesLocation.put(LocationStorage.COLUMN_POINT2,locationToAdd.getPoint2());
+        valuesLocation.put(LocationStorage.COLUMN_LATITUDE,locationToAdd.getLatitude());
+        valuesLocation.put(LocationStorage.COLUMN_LONGITUDE,locationToAdd.getLongitude());
         valuesLocation.put(LocationStorage.COLUMN_PICTURE,locationToAdd.getPicture());
         valuesLocation.put(LocationStorage.COLUMN_COMMENT,locationToAdd.getComment());
         long idLoc = dbLocations.insert(LocationStorage.LOCATION_TABLE,null,valuesLocation);
@@ -143,7 +143,7 @@ public class HikeDataSource {
                  null, null, null, null);
    //     Cursor cursor = dbLocations.query(LocationStorage.LOCATION_TABLE,allColumnsLocation,null,null,null,null,null);
 
-        Log.w("CURSOR COUNT",Integer.toString(cursor.getCount()));
+        Log.w("CURSOR COUNT ",Integer.toString(cursor.getCount()) + " " + hikeId);
         cursor.moveToFirst();
         while(!cursor.isAfterLast())
         {
