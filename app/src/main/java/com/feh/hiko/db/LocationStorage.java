@@ -25,7 +25,7 @@ public class LocationStorage extends SQLiteOpenHelper
                     "(_id integer, " +
                     "HIKE_ID INTEGER, " +
                     "LONGITUDE REAL, " +
-                    "LATITUDE  REAL, " +
+                    "LATITUDE     REAL, " +
                     "PICTURE TEXT, " +
                     "COMMENT TEXT);";
 
