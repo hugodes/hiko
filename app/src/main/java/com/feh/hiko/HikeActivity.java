@@ -156,7 +156,6 @@ public class HikeActivity extends FragmentActivity
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.i(TAG, "trolololol--------------------");
         geofencesList = new ArrayList<Geofence>();
         for (Coord c : vCoord) {
             Geofence geo = new Geofence.Builder()
@@ -167,6 +166,8 @@ public class HikeActivity extends FragmentActivity
                     .build();
             geofencesList.add(geo);
         }
+        Log.i(TAG, String.valueOf(vCoord.size()));
+
         Intent intent = new Intent();
         intent.setClass(this.getApplicationContext(), LocationDetailsActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(

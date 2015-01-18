@@ -126,6 +126,13 @@ public class HikeDataSource {
         return hikes;
     }
 
+    public Coord getSingleCoordForId(long coordId){
+
+        Cursor cursor = dbLocations.query(LocationStorage.LOCATION_TABLE,allColumnsLocation,LocationStorage.COLUMN_ID + "=" + coordId, null, null, null, null);
+        cursor.moveToFirst();
+        return new Coord(cursor.getLong(0),cursor.getLong(1),cursor.getFloat(2),cursor.getFloat(3),cursor.getString(4),cursor.getString(5));
+    }
+
     public Vector<Coord> getLocationForId(long hikeId)
     {
 
