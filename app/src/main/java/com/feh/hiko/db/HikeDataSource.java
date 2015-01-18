@@ -25,7 +25,7 @@ public class HikeDataSource {
     private SQLiteDatabase dbLocations;
     private SQLiteDatabase db;
 
-    private String[] allColumnsLocation = {LocationStorage.COLUMN_ID,LocationStorage.COLUMN_HIKEID,LocationStorage.COLUMN_POINT1,LocationStorage.COLUMN_POINT2};
+    private String[] allColumnsLocation = {LocationStorage.COLUMN_ID,LocationStorage.COLUMN_HIKEID,LocationStorage.COLUMN_POINT1,LocationStorage.COLUMN_POINT2,LocationStorage.COLUMN_PICTURE,LocationStorage.COLUMN_COMMENT};
     private String[] allColumns = {HikeStorage.COLUMN_ID,HikeStorage.COLUMN_NAME,HikeStorage.COLUMN_DISTANCE,
             HikeStorage.COLUMN_TIME};
 
@@ -69,6 +69,8 @@ public class HikeDataSource {
         valuesLocation.put(LocationStorage.COLUMN_HIKEID,locationToAdd.getHikeId());
         valuesLocation.put(LocationStorage.COLUMN_POINT1,locationToAdd.getPoint1());
         valuesLocation.put(LocationStorage.COLUMN_POINT2,locationToAdd.getPoint2());
+        valuesLocation.put(LocationStorage.COLUMN_PICTURE,locationToAdd.getPicture());
+        valuesLocation.put(LocationStorage.COLUMN_COMMENT,locationToAdd.getComment());
         long idLoc = dbLocations.insert(LocationStorage.LOCATION_TABLE,null,valuesLocation);
     }
 
@@ -138,18 +140,13 @@ public class HikeDataSource {
         cursor.moveToFirst();
         while(!cursor.isAfterLast())
         {
-            Coord nCoord = new Coord(cursor.getLong(0),cursor.getLong(1),cursor.getFloat(2),cursor.getFloat(3));
+            Coord nCoord = new Coord(cursor.getLong(0),cursor.getLong(1),cursor.getFloat(2),cursor.getFloat(3),cursor.getString(4),cursor.getString(5));
             vCoord.add(nCoord);
             cursor.moveToNext();
         }
         return vCoord;
     }
 
-  /*  private Location cursorToLocation(Cursor cursor)
-    {
-        Location location = new Location();
-        location.set
-    }*/
 
     private Hike cursorToHike(Cursor cursor)
     {

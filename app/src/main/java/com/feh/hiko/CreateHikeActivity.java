@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -76,17 +77,22 @@ public class CreateHikeActivity extends Activity {
         hikeDistance = ((EditText)findViewById(R.id.hike_distance_editText)).getText().toString();
         hikeTime = ((EditText)findViewById(R.id.hike_time_editText)).getText().toString();
 
-        HikeDataSource hike_db = new HikeDataSource(this);
-        hike_db.open();
-        long hikeId = hike_db.getNbHike();
-        hikeId++;
-        Hike hikeToAdd = new Hike(hikeId,hikeName,Float.valueOf(hikeDistance),Float.valueOf(hikeTime));
-        Log.w("hikeId in CREATEHIKE", hikeToAdd.toString());
-        hike_db.addHikePhoneDb(hikeToAdd);
-        MySingleton.getInstance().addHikeToDb(hikeToAdd);
-        Intent n = new Intent(getApplicationContext(), CreateHikeDetailsActivity.class);
-        n.putExtra("hikeId",hikeId);
-        startActivity(n);
+        if(hikeName.equals("") || hikeDistance.equals("") || hikeTime.equals("")){
+            Toast.makeText(getApplicationContext(),R.string.validateException, Toast.LENGTH_LONG).show();
+
+        }else {
+            HikeDataSource hike_db = new HikeDataSource(this);
+            hike_db.open();
+            long hikeId = hike_db.getNbHike();
+            hikeId++;
+            Hike hikeToAdd = new Hike(hikeId, hikeName, Float.valueOf(hikeDistance), Float.valueOf(hikeTime));
+            Log.w("hikeId in CREATEHIKE", hikeToAdd.toString());
+            hike_db.addHikePhoneDb(hikeToAdd);
+            MySingleton.getInstance().addHikeToDb(hikeToAdd);
+            Intent n = new Intent(getApplicationContext(), CreateHikeDetailsActivity.class);
+            n.putExtra("hikeId", hikeId);
+            startActivity(n);
+        }
     }
 
 

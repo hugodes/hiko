@@ -20,6 +20,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
+
         <Button
             android:id="@+id/button7"
             android:layout_width="100dp"

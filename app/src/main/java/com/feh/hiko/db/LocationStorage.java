@@ -15,15 +15,19 @@ public class LocationStorage extends SQLiteOpenHelper
     public static final String COLUMN_HIKEID = "HIKE_ID";
     public static final String COLUMN_POINT1 = "LOC_POINT1";
     public static final String COLUMN_POINT2 = "LOC_POINT2";
+    public static final String COLUMN_PICTURE = "PICTURE";
+    public static final String COLUMN_COMMENT = "COMMENT";
 
-    private static final int DB_VERSION = 43;
+    private static final int DB_VERSION = 48;
 
     private static final String LOCATION_TABLE_CREATE =
             "CREATE TABLE " + LOCATION_TABLE  +
                     "(_id integer, " +
                     "HIKE_ID INTEGER, " +
                     "LOC_POINT1 REAL, " +
-                    "LOC_POINT2  REAL);";
+                    "LOC_POINT2  REAL, " +
+                    "PICTURE TEXT, " +
+                    "COMMENT TEXT);";
 
     public LocationStorage(Context context){
         super(context,"locations.db",null,DB_VERSION);

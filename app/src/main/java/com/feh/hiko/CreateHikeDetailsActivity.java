@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,9 +27,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -77,6 +80,8 @@ public class CreateHikeDetailsActivity extends Activity
     private ImageView mImageView;
     private Bitmap mPhoto;
 
+    private EditText mEditTextComment;
+
 
 
     @Override
@@ -98,6 +103,8 @@ public class CreateHikeDetailsActivity extends Activity
             Log.w("SQLException", e);
         }
         mImageView = (ImageView) findViewById(R.id.imageView1);
+        mEditTextComment = ((EditText)findViewById(R.id.comment_editText));
+        mEditTextComment.setVisibility(View.INVISIBLE);
 
     }
 
@@ -200,6 +207,7 @@ public class CreateHikeDetailsActivity extends Activity
         if (requestCode == 1888 && resultCode == RESULT_OK) {
             mPhoto = (Bitmap) data.getExtras().get("data");
             mImageView.setImageBitmap(mPhoto);
+            mEditTextComment.setVisibility(View.VISIBLE);
 
         }
     }
@@ -301,26 +309,34 @@ public class CreateHikeDetailsActivity extends Activity
 
         updateUI();
 
-        int coordId = dataSource.getNbLocations() + 1;
-        Intent intent = getIntent();
-        long hikeId = intent.getLongExtra("hikeId",0);
-        dataSource.addLocationPhoneDb(new Coord(coordId,hikeId,Float.parseFloat(point1),Float.parseFloat(point2)));
+        if(point1.equals("") || point2.equals("")){
 
-        //adding to server
-        MySingleton.getInstance().addLocationToDb(coordId,hikeId,Float.parseFloat(point1),Float.parseFloat(point2));
-       // dataSource.addLocationServer(new Coord(coordId, hikeId, Float.parseFloat(point1), Float.parseFloat(point2)));
-        ((EditText)findViewById(R.id.point1_editText)).setText("");
-        ((EditText)findViewById(R.id.point2_editText)).setText("");
+            Toast.makeText(getApplicationContext(), R.string.validateException, Toast.LENGTH_LONG).show();
 
-        String namePhoto = String.valueOf(coordId) + "_" + String.valueOf(hikeId) + ".jpg";
-        saveToInternalSorage(mPhoto,namePhoto);
-        loadImageFromStorage("/data/data/com.feh.hiko/app_imageDir", namePhoto);
-        MySingleton.getInstance().setContext(getApplicationContext());
-        try {
-            MySingleton.getInstance().addPictureToTheServer(mPhoto,coordId,hikeId);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        }else {
+
+            int coordId = dataSource.getNbLocations() + 1;
+            Intent intent = getIntent();
+            long hikeId = intent.getLongExtra("hikeId", 0);
+
+            String namePhoto = String.valueOf(coordId) + "_" + String.valueOf(hikeId) + ".jpg";
+            saveToInternalSorage(mPhoto, namePhoto);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            mPhoto.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+            dataSource.addLocationPhoneDb(new Coord(coordId, hikeId, Float.parseFloat(point1), Float.parseFloat(point2), encodedImage, mEditTextComment.getText().toString()));
+
+            //adding to server
+            MySingleton.getInstance().addLocationToDb(coordId, hikeId, Float.parseFloat(point1), Float.parseFloat(point2), encodedImage, mEditTextComment.getText().toString());
+            ((EditText) findViewById(R.id.point1_editText)).setText("");
+            ((EditText) findViewById(R.id.point2_editText)).setText("");
+            mEditTextComment.setText("");
         }
+
+
 
 
 

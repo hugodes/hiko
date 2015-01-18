@@ -10,18 +10,19 @@ public class Coord {
     private long hikeId;
 
     public long id;
-    public Coord(float p_point1,float p_point2)
-    {
-        longitude = p_point1;
-        latitude = p_point2;
-    }
+    public String picture;
 
-    public Coord(long id,long hikeId,float p_point1,float p_point2)
+    public String comment;
+
+
+    public Coord(long id,long hikeId,float p_point1,float p_point2,String picture,String comment)
     {
         this.id = id;
         this.hikeId = hikeId;
         this.longitude = p_point1;
         this.latitude = p_point2;
+        this.picture = picture;
+        this.comment = comment;
     }
 
     public Coord(){
@@ -56,6 +57,22 @@ public class Coord {
 
     public void setPoint2(float point2) {
         this.latitude = point2;
+    }
+
+    public void setComment(String comment){
+        this.comment = comment;
+    }
+
+    public String getComment(){
+        return comment;
+    }
+
+    public void setPicture(String picture){
+        this.picture = picture;
+    }
+
+    public String getPicture(){
+        return this.picture;
     }
 
     public String toString()

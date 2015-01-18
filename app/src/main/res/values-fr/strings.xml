@@ -21,6 +21,7 @@
     <string name="hike_distance">Distance\nkm</string>
     <string name="hike_time">Temps\nmin</string>
     <string name="validate">Validez</string>
+    <string name="validateException">Vous devez rentrer tous les champs</string>
 
     <!-- CREATE HIKE DETAIL PAGE -->
     <string name="title_activity_create_hike_details">Créer une rando (details)</string>

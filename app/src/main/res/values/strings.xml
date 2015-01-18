@@ -21,6 +21,7 @@
     <string name="hike_distance">Hike Distance\nkm</string>
     <string name="hike_time">Hike Time\nmin</string>
     <string name="validate">Validate</string>
+    <string name="validateException">You have to fill all the fields</string>
 
     <!-- CREATE HIKE DETAIL PAGE -->
     <string name="title_activity_create_hike_details">CreateHikeDetailsActivity</string>
